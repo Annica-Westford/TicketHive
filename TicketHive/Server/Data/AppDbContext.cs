@@ -26,7 +26,7 @@ namespace TicketHive.Server.Data
                     TicketPrice = 450m,
                     MaxCapacity = 500,
                     IsFullyBooked = false,
-
+                    Image = "harrypotter"
                 },
                 new EventModel()
                 {
@@ -38,7 +38,7 @@ namespace TicketHive.Server.Data
                     TicketPrice = 950m,
                     MaxCapacity = 400,
                     IsFullyBooked = false,
-
+                    Image = "bronycon"
                 },
                 new EventModel()
                 {
@@ -50,6 +50,7 @@ namespace TicketHive.Server.Data
                     TicketPrice = 20m,
                     MaxCapacity = 2,
                     IsFullyBooked = false,
+                    Image = "dndalbin"
                 },
                 new EventModel()
                 {
@@ -61,7 +62,7 @@ namespace TicketHive.Server.Data
                     TicketPrice = 300m,
                     MaxCapacity = 700,
                     IsFullyBooked = false,
-
+                    Image = "internetcatfest"
                 }
                 );
             //base.OnModelCreating(modelBuilder);

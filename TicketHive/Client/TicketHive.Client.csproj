@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\Images\bronycon.png" />
-    <None Include="wwwroot\Images\dndalbin.png" />
+    <Resource Include="wwwroot\Images\bronycon.png" />
+    <Resource Include="wwwroot\Images\dndalbin.png" />
     <None Include="wwwroot\Images\harrypotter.png" />
     <None Include="wwwroot\Images\internetcatfest.png" />
   </ItemGroup>
