@@ -11,10 +11,16 @@ namespace TicketHive.Shared
         public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 
         // HEJ ANNICA
+
         // OSTMACKA
 
 
+        // SKINKMACKA
+
+        //HEJ HOPP xD
+
         //HEJ HOPP
  
+
     }
 }
