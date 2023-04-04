@@ -5,18 +5,21 @@
 @inject IEventsService eventsService 
 @inject AuthenticationStateProvider provider
 
-
-<h3>Home</h3>
+<input type="text" placeholder="Search..."/>
 
 @if (events != null)
 {
+    <div class="row">
     @foreach (var eventToDisplay in events)
     {
         string eventImage = $"/Images/{eventToDisplay.Image}.png";
-        <h1>@eventToDisplay.Name</h1>
+        <div class="image-container">
+        <h3>@eventToDisplay.Name</h3>
         <img src="@eventImage"/>
         <button class="btn btn-primary" @onclick="(() => AddEventToUser(eventToDisplay.Id))">Click me</button>
+        </div>
     }
+    </div>
 }
 
 
@@ -25,7 +28,6 @@
 <img src="/Images/dndalbin.png" />
 <img src="/Images/internetcatfest.png" />*@
 
-<h1>abbe fixar</h1>
 
 
 @code {
