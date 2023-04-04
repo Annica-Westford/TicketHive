@@ -74,7 +74,7 @@ namespace TicketHive.Client.Services
 
         public async Task<bool> AddEventToUserAsync(string username, int eventId)
         {
-            var result = await httpClient.PutAsJsonAsync($"api/events/{username}/{eventId}", username);
+            var result = await httpClient.PutAsync($"api/events/{username}/{eventId}", null);
 
             if (result.IsSuccessStatusCode)
             {
