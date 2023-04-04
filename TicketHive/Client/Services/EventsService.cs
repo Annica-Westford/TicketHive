@@ -47,7 +47,7 @@ namespace TicketHive.Client.Services
             return null;
         }
 
-        public async Task<EventModel?> GetByIdAsync(int id)
+        public async Task<EventModel?> GetEventByIdAsync(int id)
         {
             var result = await httpClient.GetFromJsonAsync<EventModel>($"api/events/{id}");
 
