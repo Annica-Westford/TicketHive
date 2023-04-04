@@ -1,17 +1,40 @@
 ﻿@page "/home"
 @using Microsoft.AspNetCore.Authorization;
+@using TicketHive.Shared;
 @attribute [Authorize]
+@inject IEventsService eventsService 
+
 
 <h3>Home</h3>
 
-<img src="/Images/harrypotter.png" />
+@if (events != null)
+{
+    @foreach (var eventToDisplay in events)
+    {
+        string eventImage = $"/Images/{eventToDisplay.Image}.png";
+        <h1>@eventToDisplay.Name</h1>
+        <img src="@eventImage"/>
+    }
+}
+
+
+@*<img src="/Images/harrypotter.png" />
 <img src="/Images/bronycon.png" />
 <img src="/Images/dndalbin.png" />
-<img src="/Images/internetcatfest.png" />
+<img src="/Images/internetcatfest.png" />*@
 
 <h1>abbe fixar</h1>
 
 
 @code {
+    private List<EventModel>? events;
+
+    protected override async Task OnInitializedAsync()
+    {
+        events = await eventsService.GetAllAsync();
+
+        
+    }
+    
 
 }

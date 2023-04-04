@@ -16,6 +16,7 @@ namespace TicketHive.Shared
         public DateTime DateTime { get; set; }
         public decimal TicketPrice { get; set; }
         public int MaxCapacity { get; set; }
+        public int SoldTickets { get; set; }
         public bool IsFullyBooked { get; set; }
         public List<UserModel> Users { get; set; } = new();
 

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using TicketHive.Server.Data;
 using TicketHive.Server.Models;
-using TicketHive.Server.Repos.TicketHiveRepo;
+using TicketHive.Server.Repos.EventsRepo;
 using TicketHive.Server.Repos.UsersRepo;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,7 +19,7 @@ var ticketHiveConnectionString = builder.Configuration.GetConnectionString("Tick
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(ticketHiveConnectionString));
 
 builder.Services.AddScoped<IUsersRepo, UsersRepo>();
-builder.Services.AddScoped<ITicketHiveRepo, TicketHiveRepo>();
+builder.Services.AddScoped<IEventsRepo, EventsRepo>();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>()
     .AddRoles<IdentityRole>()

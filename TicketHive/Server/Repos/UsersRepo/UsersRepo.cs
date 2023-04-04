@@ -17,6 +17,7 @@ namespace TicketHive.Server.Repos.UsersRepo
             return await signInManager.PasswordSignInAsync(username, password, isPersistent, lockOutOnFailure);
         }
 
+        //OBS! Ta bort denna ifall den inte kommer användas
         public async Task<SignInResult> SignInUser(ApplicationUser newUser, string password, bool isPersistent, bool lockOutOnFailure)
         {
             return await signInManager.PasswordSignInAsync(newUser, password, isPersistent, lockOutOnFailure);

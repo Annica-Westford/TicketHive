@@ -4,13 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using TicketHive.Server.Models;
+using TicketHive.Server.Repos.UsersRepo;
 
 namespace TicketHive.Server.Areas.Identity.Pages.Account
 {
     [BindProperties]
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly IUsersRepo repo;
 
         [Required(ErrorMessage = "Username is required")]
         public string? Username { get; set; }
@@ -18,9 +19,9 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
         [Required(ErrorMessage = "Password is required")]
         public string? Password { get; set; }
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager)
+        public LoginModel(IUsersRepo repo)
         {
-            this.signInManager = signInManager;
+            this.repo = repo;
         }
         public void OnGet()
         {
@@ -30,7 +31,7 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
         {
             if (ModelState.IsValid)
             {
-                var signInResult = await signInManager.PasswordSignInAsync(Username!, Password!, false, false);
+                var signInResult = await repo.SignInUserWithUserName(Username!, Password!, false, false);
 
                 if (signInResult.Succeeded)
                 {
