@@ -3,7 +3,7 @@ using TicketHive.Server.Models;
 
 namespace TicketHive.Server.Repos.UsersRepo
 {
-    public class UsersRepo
+    public class UsersRepo : IUsersRepo
     {
         private readonly SignInManager<ApplicationUser> signInManager;
 
