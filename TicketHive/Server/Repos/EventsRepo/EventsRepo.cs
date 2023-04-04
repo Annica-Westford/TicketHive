@@ -12,9 +12,15 @@ namespace TicketHive.Server.Repos.EventsRepo
         {
             this.context = context;
         }
-        public async Task AddAsync(EventModel eventToAdd)
+        public async Task AddEventAsync(EventModel eventToAdd)
         {
             context.Events.Add(eventToAdd);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task AddUserAsync(UserModel userToAdd)
+        {
+            context.Users.Add(userToAdd);
             await context.SaveChangesAsync();
         }
 

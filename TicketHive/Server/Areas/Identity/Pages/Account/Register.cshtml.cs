@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using TicketHive.Server.Models;
+using TicketHive.Server.Repos.EventsRepo;
 using TicketHive.Server.Repos.UsersRepo;
+using TicketHive.Shared;
 
 namespace TicketHive.Server.Areas.Identity.Pages.Account
 {
@@ -12,9 +14,10 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
     public class RegisterModel : PageModel
     {
         private readonly IUsersRepo repo;
+        private readonly IEventsRepo eventsRepo;
 
         [Required(ErrorMessage = "Username is required")]
-        [MinLength(5, ErrorMessage = "Username must be at least 5 characters")]
+        [MinLength(3, ErrorMessage = "Username must be at least 5 characters")]
         public string? Username { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
@@ -26,9 +29,10 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
         public string VerifiedPassword { get; set; }
 
 
-        public RegisterModel(IUsersRepo repo)
+        public RegisterModel(IUsersRepo usersRepo, IEventsRepo eventsRepo)
         {
-            this.repo = repo;
+            this.repo = usersRepo;
+            this.eventsRepo = eventsRepo;
         }
         public void OnGet()
         {
@@ -51,6 +55,15 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
                 //Om registreringsförsöker lyckades
                 if (registerResult.Succeeded)
                 {
+                    //skapa en instans av UserModel
+                    UserModel newTicketHiveUser = new()
+                    {
+                        Username = newUser.UserName
+                    };
+
+                    //lägg till den i TicketHive databasen
+                    await eventsRepo.AddUserAsync(newTicketHiveUser);
+
                     //Testa att logga in användaren med lösenordet
                     //var signInResult = await signInManager.PasswordSignInAsync(newUser, Password!, false, false);
                     ////Om inloggningsförsöket lyckades

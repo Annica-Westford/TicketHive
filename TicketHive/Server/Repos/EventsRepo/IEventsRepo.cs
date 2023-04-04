@@ -6,7 +6,8 @@ namespace TicketHive.Server.Repos.EventsRepo
     {
         Task<List<EventModel>?> GetAllAsync();
         Task<EventModel?> GetByIdAsync(int id);
-        Task AddAsync(EventModel eventToAdd);
+        Task AddEventAsync(EventModel eventToAdd);
+        Task AddUserAsync(UserModel userToAdd);
         Task<EventModel> UpdateAsync(EventModel eventToUpdate, int id);
         Task<bool> DeleteAsync(int id);
     }
