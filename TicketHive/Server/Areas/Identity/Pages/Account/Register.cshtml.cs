@@ -4,13 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using TicketHive.Server.Models;
+using TicketHive.Server.Repos.UsersRepo;
 
 namespace TicketHive.Server.Areas.Identity.Pages.Account
 {
     [BindProperties]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly IUsersRepo repo;
 
         [Required(ErrorMessage = "Username is required")]
         [MinLength(5, ErrorMessage = "Username must be at least 5 characters")]
@@ -25,9 +26,9 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
         public string VerifiedPassword { get; set; }
 
 
-        public RegisterModel(SignInManager<ApplicationUser> signInManager)
+        public RegisterModel(IUsersRepo repo)
         {
-            this.signInManager = signInManager;
+            this.repo = repo;
         }
         public void OnGet()
         {
@@ -45,7 +46,7 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
                 };
 
                 //Testa att registrera användaren med lösenordet den skrev in 
-                var registerResult = await signInManager.UserManager.CreateAsync(newUser, Password!);
+                var registerResult = await repo.RegisterNewUser(newUser, Password!);
 
                 //Om registreringsförsöker lyckades
                 if (registerResult.Succeeded)

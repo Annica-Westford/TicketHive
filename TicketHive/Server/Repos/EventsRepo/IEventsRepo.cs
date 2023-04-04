@@ -1,8 +1,8 @@
 ﻿using TicketHive.Shared;
 
-namespace TicketHive.Server.Repos.TicketHiveRepo
+namespace TicketHive.Server.Repos.EventsRepo
 {
-    public interface ITicketHiveRepo
+    public interface IEventsRepo
     {
         Task<List<EventModel>?> GetAllAsync();
         Task<EventModel?> GetByIdAsync(int id);

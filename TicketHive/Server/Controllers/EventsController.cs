@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TicketHive.Server.Repos.TicketHiveRepo;
+using TicketHive.Server.Repos.EventsRepo;
 
 namespace TicketHive.Server.Controllers
 {
@@ -8,9 +8,9 @@ namespace TicketHive.Server.Controllers
     [ApiController]
     public class EventsController : ControllerBase
     {
-        private readonly ITicketHiveRepo repo;
+        private readonly IEventsRepo repo;
 
-        public EventsController(ITicketHiveRepo repo)
+        public EventsController(IEventsRepo repo)
         {
             this.repo = repo;
         }
