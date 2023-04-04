@@ -8,6 +8,6 @@ namespace TicketHive.Server.Repos.TicketHiveRepo
         Task<EventModel?> GetByIdAsync(int id);
         Task AddAsync(EventModel eventToAdd);
         Task<EventModel> UpdateAsync(EventModel eventToUpdate, int id);
-        Task<bool> DeleteCatAsync(int id);
+        Task<bool> DeleteAsync(int id);
     }
 }
