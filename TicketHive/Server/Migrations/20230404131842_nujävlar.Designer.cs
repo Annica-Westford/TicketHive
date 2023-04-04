@@ -12,8 +12,8 @@ using TicketHive.Server.Data;
 namespace TicketHive.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230403134458_SeededData")]
-    partial class SeededData
+    [Migration("20230404131842_nujävlar")]
+    partial class nujävlar
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,6 +72,9 @@ namespace TicketHive.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SoldTickets")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("TicketPrice")
                         .HasColumnType("decimal(18,2)");
 
@@ -85,10 +88,12 @@ namespace TicketHive.Server.Migrations
                             Id = 1,
                             DateTime = new DateTime(2023, 12, 23, 20, 0, 0, 0, DateTimeKind.Unspecified),
                             EventType = "Concert",
+                            Image = "harrypotter",
                             IsFullyBooked = false,
                             Location = "Sweden",
                             MaxCapacity = 500,
                             Name = "Harry Potter In Concert",
+                            SoldTickets = 0,
                             TicketPrice = 450m
                         },
                         new
@@ -96,10 +101,12 @@ namespace TicketHive.Server.Migrations
                             Id = 2,
                             DateTime = new DateTime(2024, 3, 10, 9, 0, 0, 0, DateTimeKind.Unspecified),
                             EventType = "Convention",
+                            Image = "bronycon",
                             IsFullyBooked = false,
                             Location = "Denmark",
                             MaxCapacity = 400,
                             Name = "BronyCon",
+                            SoldTickets = 0,
                             TicketPrice = 950m
                         },
                         new
@@ -107,10 +114,12 @@ namespace TicketHive.Server.Migrations
                             Id = 3,
                             DateTime = new DateTime(2023, 5, 1, 8, 0, 0, 0, DateTimeKind.Unspecified),
                             EventType = "Games",
+                            Image = "dndalbin",
                             IsFullyBooked = false,
                             Location = "Sweden",
                             MaxCapacity = 2,
                             Name = "D&D with Albin",
+                            SoldTickets = 0,
                             TicketPrice = 20m
                         },
                         new
@@ -118,10 +127,12 @@ namespace TicketHive.Server.Migrations
                             Id = 4,
                             DateTime = new DateTime(2023, 7, 15, 10, 0, 0, 0, DateTimeKind.Unspecified),
                             EventType = "Festival",
+                            Image = "internetcatfest",
                             IsFullyBooked = false,
                             Location = "Poland",
                             MaxCapacity = 700,
                             Name = "Internet Cat Video Festival",
+                            SoldTickets = 0,
                             TicketPrice = 300m
                         });
                 });
@@ -141,6 +152,18 @@ namespace TicketHive.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Username = "user"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Username = "admin"
+                        });
                 });
 
             modelBuilder.Entity("EventModelUserModel", b =>

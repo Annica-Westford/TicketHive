@@ -3,6 +3,7 @@
 @using TicketHive.Shared;
 @attribute [Authorize]
 @inject IEventsService eventsService 
+@inject AuthenticationStateProvider provider
 
 
 <h3>Home</h3>
@@ -14,6 +15,7 @@
         string eventImage = $"/Images/{eventToDisplay.Image}.png";
         <h1>@eventToDisplay.Name</h1>
         <img src="@eventImage"/>
+        <button class="btn btn-primary" @onclick="(() => AddEventToUser(eventToDisplay.Id))">Click me</button>
     }
 }
 
@@ -33,8 +35,16 @@
     {
         events = await eventsService.GetAllAsync();
 
-        
+
     }
-    
+
+    private async Task AddEventToUser(int id)
+    {
+        var authState = await provider.GetAuthenticationStateAsync();
+        var userName = authState.User.Identity.Name;
+
+        await eventsService.AddEventToUserAsync(userName, id);
+    }
+
 
 }

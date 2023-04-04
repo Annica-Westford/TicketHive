@@ -7,7 +7,7 @@ namespace TicketHive.Server.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            
+
         }
 
         public DbSet<EventModel> Events { get; set; }
@@ -67,8 +67,19 @@ namespace TicketHive.Server.Data
                 );
             //base.OnModelCreating(modelBuilder);
 
-
-  
+            // Seedar user och admin i TicketHive
+            modelBuilder.Entity<UserModel>().HasData(
+                new UserModel()
+                {
+                    Id = 1,
+                    Username = "user",
+                },
+                new UserModel()
+                {
+                    Id = 2,
+                    Username = "admin",
+                }
+                );
         }
     }
 }

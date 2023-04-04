@@ -149,6 +149,18 @@ namespace TicketHive.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Username = "user"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Username = "admin"
+                        });
                 });
 
             modelBuilder.Entity("EventModelUserModel", b =>
