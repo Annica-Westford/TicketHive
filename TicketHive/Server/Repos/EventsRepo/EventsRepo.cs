@@ -55,10 +55,10 @@ namespace TicketHive.Server.Repos.EventsRepo
 
         public async Task<List<EventModel>?> GetAllAsync()
         {
-            return await context.Events.Include(e => e.Users).ToListAsync();
+            return await context.Events.ToListAsync();
         }
 
-        public async Task<EventModel?> GetByIdAsync(int id)
+        public async Task<EventModel?> GetEventByIdAsync(int id)
         {
             return await context.Events.FirstOrDefaultAsync(e => e.Id == id);
         }

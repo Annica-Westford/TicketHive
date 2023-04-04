@@ -5,7 +5,7 @@ namespace TicketHive.Server.Repos.EventsRepo
     public interface IEventsRepo
     {
         Task<List<EventModel>?> GetAllAsync();
-        Task<EventModel?> GetByIdAsync(int id);
+        Task<EventModel?> GetEventByIdAsync(int id);
         Task AddEventAsync(EventModel eventToAdd);
         Task AddUserAsync(UserModel userToAdd);
         Task<bool> AddEventToUserAsync(string username, int eventId);

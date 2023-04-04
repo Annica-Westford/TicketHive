@@ -29,9 +29,9 @@ namespace TicketHive.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<EventModel?>> GetByIdAsync(int id)
+        public async Task<ActionResult<EventModel?>> GetEventByIdAsync(int id)
         {
-            var selectedEvent = await repo.GetByIdAsync(id);
+            var selectedEvent = await repo.GetEventByIdAsync(id);
 
             if (selectedEvent != null)
             {
