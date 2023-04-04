@@ -24,6 +24,21 @@ namespace TicketHive.Server.Repos.EventsRepo
             await context.SaveChangesAsync();
         }
 
+        public async Task<bool> AddEventToUserAsync(string username, int eventId)
+        {
+            var dbEvent = await context.Events.FirstOrDefaultAsync(e => e.Id == eventId);
+            var dbUser = await context.Users.FirstOrDefaultAsync(u => u.Username == username);
+
+            if (dbEvent != null && dbUser != null)
+            {
+                dbUser.Events.Add(dbEvent);
+                await context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
         public async Task<bool> DeleteAsync(int id)
         {
             var dbEvent = await context.Events.FirstOrDefaultAsync(e => e.Id == id);

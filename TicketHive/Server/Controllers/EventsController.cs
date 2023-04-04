@@ -53,12 +53,26 @@ namespace TicketHive.Server.Controllers
             return NotFound();
         }
 
+        [HttpPut("{username}/{eventId}")]
+        public async Task<IActionResult> AddEventToUserAsync(string username, int eventId)
+        {
+            bool isUpdatedSuccessfully = await repo.AddEventToUserAsync(username, eventId);
+
+            if (isUpdatedSuccessfully)
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddEventAsync([FromBody] EventModel eventToAdd)
         {
             await repo.AddEventAsync(eventToAdd);
             return Ok();
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)

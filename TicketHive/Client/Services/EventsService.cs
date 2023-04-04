@@ -61,7 +61,7 @@ namespace TicketHive.Client.Services
 
         public async Task<EventModel?> UpdateAsync(EventModel eventToUpdate)
         {
-            var result = await httpClient.PutAsJsonAsync($"api/cats/{eventToUpdate.Id}", eventToUpdate);
+            var result = await httpClient.PutAsJsonAsync($"api/events/{eventToUpdate.Id}", eventToUpdate);
 
             if (result.IsSuccessStatusCode)
             {
@@ -70,6 +70,18 @@ namespace TicketHive.Client.Services
             }
 
             return null;
+        }
+
+        public async Task<bool> AddEventToUserAsync(string username, int eventId)
+        {
+            var result = await httpClient.PutAsJsonAsync($"api/events/{username}/{eventId}", username);
+
+            if (result.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
