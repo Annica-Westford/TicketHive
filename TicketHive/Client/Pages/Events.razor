@@ -1,9 +1,63 @@
 ﻿@page "/events"
+@page "/events/{searchWord}"
 @using Microsoft.AspNetCore.Authorization;
+@using TicketHive.Shared;
 @attribute [Authorize]
+@inject IEventsService eventsService
+@inject AuthenticationStateProvider provider
+@inject NavigationManager navigationManager
 
-<h3>Events</h3>
+@if (searchWord != null)
+{
+    fillButton = searchWord;
+}
+<input @oninput="FilterEvents" type="text" placeholder="Search..." value="@fillButton" />
+
+@if (filteredEvents != null)
+{
+    <div class="row">
+        @foreach (var eventToDisplay in filteredEvents)
+        {
+            string eventImage = $"/Images/{eventToDisplay.Image}.png";
+            <div class="image-container">
+                <h3>@eventToDisplay.Name</h3>
+                <img src="@eventImage" />
+                <button class="btn btn-primary" @onclick="(() => ShowEvent(eventToDisplay.Id))">Read more</button>
+            </div>
+        }
+    </div>
+}
 
 @code {
+
+    [Parameter]
+    public string? searchWord { get; set; }
+    public string? fillButton;
+    private List<EventModel>? allEvents;
+    private List<EventModel>? filteredEvents;
+
+    protected override async Task OnInitializedAsync()
+    {
+        allEvents = await eventsService.GetAllEventsAsync();
+        filteredEvents = allEvents;
+
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        filteredEvents = allEvents.Where(fisk => fisk.Name!.ToLower().Contains(searchWord.ToLower())).ToList();
+
+    }
+
+    void ShowEvent(int id)
+    {
+        navigationManager.NavigateTo($"/eventdetails/{id}");
+    }
+
+    private void FilterEvents(ChangeEventArgs e)
+    {
+        filteredEvents = allEvents.Where(fisk => fisk.Name!.ToLower().Contains(e.Value.ToString().ToLower())).ToList();
+    }
 
 }

@@ -4,6 +4,38 @@
 
 <h3>Checkout</h3>
 
-@code {
-
+@*@if (events != null)
+{
+        <div class="row">
+        @foreach (var eventToDisplay in events)
+        {
+            string eventImage = $"/Images/{eventToDisplay.Image}.png";
+                    <div class="image-container">
+                        <h3>@eventToDisplay.Name</h3>
+                        <img src="@eventImage" />
+                        <button class="btn btn-primary" @onclick="(() => AddEventToUser(eventToDisplay.Id))">Click me</button>
+                    </div>
+        }
+        </div>
 }
+
+
+@code {
+    private List<EventModel>? events;
+    private string loggedInUserUsername;
+
+    protected override async Task OnInitializedAsync()
+    {
+        events = await eventsService.GetAllEventsAsync();
+
+        var authState = await provider.GetAuthenticationStateAsync();
+        loggedInUserUsername = authState.User.Identity.Name;
+
+    }
+
+    private async Task AddEventToUser(int id)
+    {
+
+        await eventsService.AddEventToUserAsync(loggedInUserUsername, id);
+    }
+}*@

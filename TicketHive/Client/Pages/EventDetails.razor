@@ -1,9 +1,54 @@
-﻿@page "/eventdetails"
+﻿@page "/eventdetails/{id:int}"
 @using Microsoft.AspNetCore.Authorization;
+@using TicketHive.Shared;
 @attribute [Authorize]
+@inject IEventsService eventsService
+@inject NavigationManager navigationManager
 
-<h3>EventDetails</h3>
+<button class="btn btn-primary" @onclick="(() => GoBack())">BACK</button>
+
+@if (selectedEvent != null)
+{
+    string eventImage = $"/Images/{selectedEvent.Image}.png";
+    bool disableCartButton = false;
+
+    <h1>@selectedEvent.Name</h1>
+    <h2>Sold tickets: @selectedEvent.SoldTickets</h2>
+    <img src="@eventImage" />
+    <h3>Location: @selectedEvent.Location</h3>
+    <h4>Date: @selectedEvent.DateTime</h4>
+
+    if (selectedEvent.IsFullyBooked)
+    {
+        disableCartButton = true;
+    }
+
+    <button disabled="@disableCartButton" class="btn btn-primary" @onclick="(() => AddToCart())">Add to cart</button>
+
+}
+else
+{
+    <h1>ERROR 101 KAOS. ABBE LÖS</h1>
+}
+
 
 @code {
+    [Parameter]
+    public int Id { get; set; }
+    private EventModel? selectedEvent;
 
+    protected override async Task OnInitializedAsync()
+    {
+        selectedEvent = await eventsService.GetEventByIdAsync(Id);
+    }
+
+    void GoBack()
+    {
+        navigationManager.NavigateTo($"/home");
+    }
+
+    void AddToCart()
+    {
+        // här ska eventet läggas till i cart. #hjälp
+    }
 }
