@@ -4,6 +4,7 @@
 @attribute [Authorize]
 @inject IEventsService eventsService
 @inject NavigationManager navigationManager
+@inject ILocalStorageService localStorageService
 
 <button class="btn btn-primary" @onclick="(() => GoBack())">BACK</button>
 
@@ -43,14 +44,14 @@ else
         selectedEvent = await eventsService.GetEventByIdAsync(Id);
     }
 
-    void GoBack()
+    private void GoBack()
     {
         navigationManager.NavigateTo($"/home");
     }
 
-    void AddToCart()
+    private async Task AddToCart()
     {
-        // här ska eventet läggas till i cart. #hjälp
+        // här ska eventet läggas till i cart
         //efter varje tillagt event måste man kolla om eventet har uppnåt max capacity
         // om man uppnått max capacity så ska eventets button bli disabled
     }

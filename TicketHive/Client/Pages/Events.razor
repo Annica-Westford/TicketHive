@@ -13,16 +13,32 @@
 }
 <input @oninput="FilterEvents" type="text" placeholder="Search..." value="@fillButton" />
 
+<label for="sortSelect">Sort by:</label>
+<select id="sortSelect" @onchange="SortEvents">
+    <option value="">Sort by:</option>
+    <option value="price low to high">Price Low to High</option>
+    <option value="price high to low">Price High to Low</option>
+    <option value="date ascending">Date Ascending</option>
+    <option value="date descending">Date Descending</option>
+</select>
+
 @if (filteredEvents != null)
 {
     <div class="row">
         @foreach (var eventToDisplay in filteredEvents)
         {
+            if (eventToDisplay.IsFullyBooked)
+            {
+                disableButton = true;
+            }
+
             string eventImage = $"/Images/{eventToDisplay.Image}.png";
             <div class="image-container">
                 <h3>@eventToDisplay.Name</h3>
+                <h2>Date: @eventToDisplay.DateTime</h2>
+                <h2>Price: @eventToDisplay.TicketPrice</h2>
                 <img src="@eventImage" />
-                <button class="btn btn-primary" @onclick="(() => ShowEvent(eventToDisplay.Id))">Read more</button>
+                <button disabled="@disableButton" class="btn btn-primary" @onclick="(() => ShowEvent(eventToDisplay.Id))">Read more</button>
             </div>
         }
     </div>
@@ -33,8 +49,10 @@
     [Parameter]
     public string? searchWord { get; set; }
     public string? fillButton;
+    bool disableButton = false;
     private List<EventModel>? allEvents;
     private List<EventModel>? filteredEvents;
+    private string sortType = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -46,7 +64,11 @@
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        filteredEvents = allEvents.Where(fisk => fisk.Name!.ToLower().Contains(searchWord.ToLower())).ToList();
+
+        if (searchWord != null)
+        {
+            filteredEvents = allEvents.Where(fisk => fisk.Name!.ToLower().Contains(searchWord.ToLower())).ToList();
+        }
 
     }
 
@@ -58,6 +80,31 @@
     private void FilterEvents(ChangeEventArgs e)
     {
         filteredEvents = allEvents.Where(fisk => fisk.Name!.ToLower().Contains(e.Value.ToString().ToLower())).ToList();
+    }
+
+    private void SortEvents(ChangeEventArgs e)
+    {
+        sortType = e.Value.ToString();
+
+        if (sortType == "price low to high")
+        {
+            filteredEvents = filteredEvents.OrderBy(e => e.TicketPrice).ToList();
+
+        }
+        else if (sortType == "price high to low")
+        {
+            filteredEvents = filteredEvents.OrderByDescending(e => e.TicketPrice).ToList();
+        }
+        else if (sortType == "date ascending")
+        {
+            filteredEvents = filteredEvents.OrderBy(e => e.DateTime).ToList();
+
+        }
+        else if (sortType == "date descending")
+        {
+            filteredEvents = filteredEvents.OrderByDescending(e => e.DateTime).ToList();
+        }
+
     }
 
 }
