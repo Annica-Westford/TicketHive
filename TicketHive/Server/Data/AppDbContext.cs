@@ -20,6 +20,7 @@ namespace TicketHive.Server.Data
                 {
                     Id = 1,
                     Name = "Harry Potter In Concert",
+                    Description = "",
                     EventType = "Concert",
                     Location = "Sweden",
                     DateTime = new DateTime(2023, 12, 23, 20, 00, 00),
@@ -32,6 +33,7 @@ namespace TicketHive.Server.Data
                 {
                     Id = 2,
                     Name = "BronyCon",
+                    Description = "",
                     EventType = "Convention",
                     Location = "Denmark",
                     DateTime = new DateTime(2024, 03, 10, 09, 00, 00),
@@ -44,6 +46,7 @@ namespace TicketHive.Server.Data
                 {
                     Id = 3,
                     Name = "D&D with Albin",
+                    Description = "",
                     EventType = "Games",
                     Location = "Sweden",
                     DateTime = new DateTime(2023, 05, 01, 08, 00, 00),
@@ -56,6 +59,7 @@ namespace TicketHive.Server.Data
                 {
                     Id = 4,
                     Name = "Internet Cat Video Festival",
+                    Description = "",
                     EventType = "Festival",
                     Location = "Poland",
                     DateTime = new DateTime(2023, 07, 15, 10, 00, 00),

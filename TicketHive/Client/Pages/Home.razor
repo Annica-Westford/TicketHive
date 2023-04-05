@@ -4,43 +4,70 @@
 @attribute [Authorize]
 @inject IEventsService eventsService 
 @inject AuthenticationStateProvider provider
+@inject NavigationManager navigationManager
 
-<input type="text" placeholder="Search..."/>
+<div>
+    <input type="text" @bind-value="@searchWord" placeholder="Keyword" />
 
-@if (events != null)
+    <button class="btn btn-primary" @onclick="@(() => SearchForEvent())">Search</button>
+</div>
+
+
+@if (eventsBought != null)
+{
+    <h1>Events you are attending:</h1>
+
+    foreach (var eventBought in eventsBought)
+    {
+        <h3>@eventBought.Name</h3>
+    }
+}
+
+
+<h1>Most popular events:</h1>
+
+@if (popularEvents != null)
 {
     <div class="row">
-    @foreach (var eventToDisplay in events)
+        @foreach (var eventToDisplay in popularEvents)
     {
         string eventImage = $"/Images/{eventToDisplay.Image}.png";
         <div class="image-container">
         <h3>@eventToDisplay.Name</h3>
         <img src="@eventImage"/>
-        <button class="btn btn-primary" @onclick="(() => AddEventToUser(eventToDisplay.Id))">Click me</button>
+        <button class="btn btn-primary" @onclick="(() => ShowEvent(eventToDisplay.Id))">Read more</button>
         </div>
     }
     </div>
 }
 
-
 @code {
-    private List<EventModel>? events;
-    private string loggedInUserUsername;
+
+    private List<EventModel>? popularEvents;
+    private List<EventModel>? eventsBought;
+    private string searchWord;
 
     protected override async Task OnInitializedAsync()
     {
-        events = await eventsService.GetAllEventsAsync();
+        // Hämtar alla populära events, sorterar dom och visar top 3 baserat på sålda biljetter
+        List<EventModel> allEvents = await eventsService.GetAllEventsAsync();
+        List<EventModel> sortedPopularEvents = allEvents.OrderByDescending(s => s.SoldTickets).ToList();
+        popularEvents = sortedPopularEvents.Take(3).ToList();
 
+        // Hämtar alla events som användaren har biljetter till
         var authState = await provider.GetAuthenticationStateAsync();
-        loggedInUserUsername = authState.User.Identity.Name;
+        var name = authState.User.Identity.Name;
+        eventsBought = await eventsService.GetAllEventsFromUserAsync(name);
 
     }
 
-    private async Task AddEventToUser(int id)
+    void ShowEvent(int id)
     {
-
-        await eventsService.AddEventToUserAsync(loggedInUserUsername, id);
+        navigationManager.NavigateTo($"/eventdetails/{id}");
     }
 
-
+    void SearchForEvent()
+    {
+        navigationManager.NavigateTo($"/events/{searchWord}");
+    }
 }
