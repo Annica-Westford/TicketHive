@@ -5,6 +5,13 @@
 
 <h1>Log in!</h1>
 
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <script>
+        alert('@Model.Message');
+    </script>
+}
+
 <form method="post">
     <label for="username-input">Username:</label>
     <input id="username-input" type="text" asp-for="Username" placeholder="Username" />

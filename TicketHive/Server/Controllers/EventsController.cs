@@ -17,9 +17,9 @@ namespace TicketHive.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<EventModel>?>> GetAllAsync()
+        public async Task<ActionResult<List<EventModel>?>> GetAllEventsAsync()
         {
-            var events = await repo.GetAllAsync();
+            var events = await repo.GetAllEventsAsync();
             if(events != null)
             {
                 return Ok(events);
@@ -28,7 +28,7 @@ namespace TicketHive.Server.Controllers
             return NotFound();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("event/{id}")]
         public async Task<ActionResult<EventModel?>> GetEventByIdAsync(int id)
         {
             var selectedEvent = await repo.GetEventByIdAsync(id);
@@ -41,10 +41,23 @@ namespace TicketHive.Server.Controllers
             return NotFound();
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<EventModel?>> UpdateAsync([FromBody] EventModel eventToUpdate, int id)
+        [HttpGet("user/{username}")]
+        public async Task<ActionResult<List<EventModel>?>> GetAllEventsFromUserAsync(string username)
         {
-            var updatedEvent = await repo.UpdateAsync(eventToUpdate, id);
+            var userEventsList = await repo.GetAllEventsFromUserAsync(username);
+
+            if (userEventsList != null)
+            {
+                return Ok(userEventsList);
+            }
+
+            return NotFound();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<EventModel?>> UpdateEventAsync([FromBody] EventModel eventToUpdate, int id)
+        {
+            var updatedEvent = await repo.UpdateEventAsync(eventToUpdate, id);
             if (updatedEvent != null)
             {
                 return Ok(updatedEvent);
@@ -75,9 +88,9 @@ namespace TicketHive.Server.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteEventAsync(int id)
         {
-            bool isDeletedSuccessfully = await repo.DeleteAsync(id);
+            bool isDeletedSuccessfully = await repo.DeleteEventAsync(id);
             if (isDeletedSuccessfully)
             {
                 return Ok();

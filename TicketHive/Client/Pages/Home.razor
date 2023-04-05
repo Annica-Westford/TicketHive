@@ -25,19 +25,21 @@
 
 @code {
     private List<EventModel>? events;
+    private string loggedInUserUsername;
 
     protected override async Task OnInitializedAsync()
     {
-        events = await eventsService.GetAllAsync();
+        events = await eventsService.GetAllEventsAsync();
+
+        var authState = await provider.GetAuthenticationStateAsync();
+        loggedInUserUsername = authState.User.Identity.Name;
 
     }
 
     private async Task AddEventToUser(int id)
     {
-        var authState = await provider.GetAuthenticationStateAsync();
-        var userName = authState.User.Identity.Name;
 
-        await eventsService.AddEventToUserAsync(userName, id);
+        await eventsService.AddEventToUserAsync(loggedInUserUsername, id);
     }
 
 
