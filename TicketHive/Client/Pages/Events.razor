@@ -46,7 +46,11 @@
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        filteredEvents = allEvents.Where(fisk => fisk.Name!.ToLower().Contains(searchWord.ToLower())).ToList();
+
+        if (searchWord != null)
+        {
+            filteredEvents = allEvents.Where(fisk => fisk.Name!.ToLower().Contains(searchWord.ToLower())).ToList();
+        }
 
     }
 
