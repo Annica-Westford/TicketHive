@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace TicketHive.Shared
@@ -18,6 +19,8 @@ namespace TicketHive.Shared
         public int MaxCapacity { get; set; }
         public int SoldTickets { get; set; }
         public bool IsFullyBooked { get; set; }
+
+        [JsonIgnore]
         public List<UserModel> Users { get; set; } = new();
 
     }

@@ -23,7 +23,7 @@ namespace TicketHive.Client.Services
             return false;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteEventAsync(int id)
         {
             var result = await httpClient.DeleteAsync($"api/events/{id}");
 
@@ -35,7 +35,7 @@ namespace TicketHive.Client.Services
             return false;
         }
 
-        public async Task<List<EventModel>?> GetAllAsync()
+        public async Task<List<EventModel>?> GetAllEventsAsync()
         {
             var result = await httpClient.GetFromJsonAsync<List<EventModel>>("api/events");
 
@@ -49,7 +49,7 @@ namespace TicketHive.Client.Services
 
         public async Task<EventModel?> GetEventByIdAsync(int id)
         {
-            var result = await httpClient.GetFromJsonAsync<EventModel>($"api/events/{id}");
+            var result = await httpClient.GetFromJsonAsync<EventModel>($"api/events/event/{id}");
 
             if (result != null)
             {
@@ -59,7 +59,20 @@ namespace TicketHive.Client.Services
             return null;
         }
 
-        public async Task<EventModel?> UpdateAsync(EventModel eventToUpdate)
+        //Obs! När denna metoden körs, tänk på att listan kan komma tillbaka tom, så gör en check i klienten
+        public async Task<List<EventModel>?> GetAllEventsFromUserAsync(string username)
+        {
+            var result = await httpClient.GetFromJsonAsync<List<EventModel>>($"api/events/user/{username}");
+
+            if (result != null)
+            {
+                return result;
+            }
+
+            return null;
+        }
+
+        public async Task<EventModel?> UpdateEventAsync(EventModel eventToUpdate)
         {
             var result = await httpClient.PutAsJsonAsync($"api/events/{eventToUpdate.Id}", eventToUpdate);
 

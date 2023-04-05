@@ -13,7 +13,6 @@ namespace TicketHive.Server.Repos.EventsRepo
             this.context = context;
         }
 
-        //BEHÖVER LÄGGA TILL EN METOD I REPOT FÖR ATT HÄMTA ALLA BOKNINGAR SOM EN SPECIFIK ANVÄNDARE GJORT
         public async Task AddEventAsync(EventModel eventToAdd)
         {
             context.Events.Add(eventToAdd);
@@ -41,7 +40,7 @@ namespace TicketHive.Server.Repos.EventsRepo
             return false;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteEventAsync(int id)
         {
             var dbEvent = await context.Events.FirstOrDefaultAsync(e => e.Id == id);
 
@@ -55,9 +54,21 @@ namespace TicketHive.Server.Repos.EventsRepo
             return false;
         }
 
-        public async Task<List<EventModel>?> GetAllAsync()
+        public async Task<List<EventModel>?> GetAllEventsAsync()
         {
             return await context.Events.ToListAsync();
+        }
+
+        public async Task<List<EventModel>> GetAllEventsFromUserAsync(string username)
+        {
+            var dbUser = await context.Users.Include(u => u.Events).FirstOrDefaultAsync(u => u.Username == username);
+            
+            if (dbUser != null )
+            {
+                return dbUser.Events.ToList();
+            }
+
+            return null;
         }
 
         public async Task<EventModel?> GetEventByIdAsync(int id)
@@ -77,7 +88,7 @@ namespace TicketHive.Server.Repos.EventsRepo
             }
         }
 
-        public async Task<EventModel> UpdateAsync(EventModel eventToUpdate, int id)
+        public async Task<EventModel> UpdateEventAsync(EventModel eventToUpdate, int id)
         {
             var dbEvent = await context.Events.FirstOrDefaultAsync(e => e.Id == id);
 
