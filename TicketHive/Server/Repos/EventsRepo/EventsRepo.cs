@@ -12,6 +12,8 @@ namespace TicketHive.Server.Repos.EventsRepo
         {
             this.context = context;
         }
+
+        //BEHÖVER LÄGGA TILL EN METOD I REPOT FÖR ATT HÄMTA ALLA BOKNINGAR SOM EN SPECIFIK ANVÄNDARE GJORT
         public async Task AddEventAsync(EventModel eventToAdd)
         {
             context.Events.Add(eventToAdd);
