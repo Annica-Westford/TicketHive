@@ -2,8 +2,21 @@
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+@{
+	string eventImage = $"/Images/logo.png";
 
-Welcome to your new app.
+	<div class="logo-container">
+	<img src="@eventImage"/>
+	</div>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+	<div class="container">
+        <h1>Welcome to Ticket Hive</h1>
+        <p>We are a tech startup with a simple goal: to simplify and centralize the process of booking tickets for different types of events.</p>
+        <p>Our platform is designed to make the ticket booking experience fast, easy, and convenient for everyone. Whether you are planning to attend a concert, a sports game, or a theater performance, Ticket Hive has got you covered.</p>
+        <p>With Ticket Hive, you can browse and compare ticket options from different vendors, view seat maps and prices, and make your purchase with just a few clicks. No more jumping from one site to another, no more confusion about which tickets to buy, and no more stress about missing out on your favorite events.</p>
+			<a href="authentication/register"><button>Get Started</button></a>
+		</div>
+	
+
+		
+}
