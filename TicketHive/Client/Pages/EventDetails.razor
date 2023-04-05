@@ -10,13 +10,13 @@
 @if (selectedEvent != null)
 {
     string eventImage = $"/Images/{selectedEvent.Image}.png";
-    bool disableCartButton = false;
 
     <h1>@selectedEvent.Name</h1>
     <h2>Sold tickets: @selectedEvent.SoldTickets</h2>
     <img src="@eventImage" />
     <h3>Location: @selectedEvent.Location</h3>
     <h4>Date: @selectedEvent.DateTime</h4>
+    <p>@selectedEvent.Description</p>
 
     if (selectedEvent.IsFullyBooked)
     {
@@ -36,6 +36,7 @@ else
     [Parameter]
     public int Id { get; set; }
     private EventModel? selectedEvent;
+    bool disableCartButton = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -50,5 +51,7 @@ else
     void AddToCart()
     {
         // här ska eventet läggas till i cart. #hjälp
+        //efter varje tillagt event måste man kolla om eventet har uppnåt max capacity
+        // om man uppnått max capacity så ska eventets button bli disabled
     }
 }
