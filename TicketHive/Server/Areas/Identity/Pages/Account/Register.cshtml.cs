@@ -10,24 +10,27 @@ using TicketHive.Shared;
 
 namespace TicketHive.Server.Areas.Identity.Pages.Account
 {
-    [BindProperties]
     public class RegisterModel : PageModel
     {
         private readonly IUsersRepo repo;
         private readonly IEventsRepo eventsRepo;
 
+        [BindProperty]
         [Required(ErrorMessage = "Username is required")]
         [MinLength(3, ErrorMessage = "Username must be at least 5 characters")]
         public string? Username { get; set; }
 
+        [BindProperty]
         [Required(ErrorMessage = "Password is required")]
         [MinLength(5, ErrorMessage = "Password must be at least 5 characters")]
         public string? Password { get; set; }
 
+        [BindProperty]
         [Required]
         [Compare(nameof(Password), ErrorMessage = "Passwords don't match!")]
         public string VerifiedPassword { get; set; }
 
+        public string Message { get; set; } = string.Empty;
 
         public RegisterModel(IUsersRepo usersRepo, IEventsRepo eventsRepo)
         {
@@ -61,7 +64,7 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
                         Username = newUser.UserName
                     };
 
-                    //lägg till den i TicketHive databasen
+                    //lägg till den i TicketHive-databasen
                     await eventsRepo.AddUserAsync(newTicketHiveUser);
 
                     //Testa att logga in användaren med lösenordet
@@ -75,6 +78,10 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
 
                     //Skicka personen till Login-sidan
                     return Redirect("/Authentication/Login");
+                }
+                else
+                {
+                    Message = "Failed to Register New User";
                 }
             }
 
