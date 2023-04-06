@@ -42,6 +42,8 @@
     </div>
 }
 
+<button class="btn btn-primary" @onclick="(() => ShowAllEvents())">Show all events</button>
+
 <div class="fullscreen">
     <div class="background"></div>
     @*<video loop muted autoplay>
@@ -72,6 +74,11 @@
     void ShowEvent(int id)
     {
         navigationManager.NavigateTo($"/eventdetails/{id}");
+    }
+
+    void ShowAllEvents()
+    {
+        navigationManager.NavigateTo("/events");
     }
 
     void SearchForEvent()

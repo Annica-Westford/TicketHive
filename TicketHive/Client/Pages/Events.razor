@@ -29,16 +29,24 @@
         {
             if (eventToDisplay.IsFullyBooked)
             {
-                disableButton = true;
+                // Här ska någon text eller färg indikera att eventet är slutsålt
+                ticketsText = "SOLD OUT";
+            }
+            else
+            {
+                // Antalet biljetter kvar
+                ticketsLeft = eventToDisplay.MaxCapacity - eventToDisplay.SoldTickets;
+                ticketsText = ticketsLeft.ToString();
             }
 
             string eventImage = $"/Images/{eventToDisplay.Image}.png";
             <div class="image-container">
-                <h3>@eventToDisplay.Name</h3>
-                <h2>Date: @eventToDisplay.DateTime</h2>
-                <h2>Price: @eventToDisplay.TicketPrice</h2>
+                <h1>@eventToDisplay.Name</h1>
+                <h3>Date: @eventToDisplay.DateTime</h3>
+                <h3>Price: @eventToDisplay.TicketPrice</h3>
                 <img src="@eventImage" />
-                <button disabled="@disableButton" class="btn btn-primary" @onclick="(() => ShowEvent(eventToDisplay.Id))">Read more</button>
+                <p>Tickets left: @ticketsText</p>
+                <button class="btn btn-primary" @onclick="(() => ShowEvent(eventToDisplay.Id))">Read more</button>
             </div>
         }
     </div>
@@ -49,7 +57,9 @@
     [Parameter]
     public string? searchWord { get; set; }
     public string? fillButton;
-    bool disableButton = false;
+    public int? ticketsLeft;
+    public string? ticketsText;
+
     private List<EventModel>? allEvents;
     private List<EventModel>? filteredEvents;
     private string sortType = string.Empty;
