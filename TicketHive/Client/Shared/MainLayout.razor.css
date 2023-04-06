@@ -20,6 +20,7 @@ main {
     height: 3.5rem;
     display: flex;
     align-items: center;
+    background-color: rgba(48, 80, 118, 0.8);
 }
 
     .top-row ::deep a, .top-row ::deep .btn-link {

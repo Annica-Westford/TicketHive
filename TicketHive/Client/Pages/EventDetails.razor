@@ -8,7 +8,43 @@
 
 <button class="btn btn-primary" @onclick="(() => GoBack())">BACK</button>
 
-@if (selectedEvent != null)
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            @if (selectedEvent != null)
+            {
+                string eventImage = $"/Images/{selectedEvent.Image}.png";
+
+                <h1>@selectedEvent.Name</h1>
+                <h2>Sold tickets: @selectedEvent.SoldTickets</h2>
+                <img src="@eventImage" />
+                <h3>Location: @selectedEvent.Location</h3>
+                <h4>Date: @selectedEvent.DateTime</h4>
+                <p>@selectedEvent.Description</p>               
+                if (selectedEvent.IsFullyBooked)
+                {
+                    disableCartButton = true;
+                }
+
+                <button disabled="@disableCartButton" class="btn btn-primary" @onclick="(() => AddToCart())">Add to cart</button>
+
+            }
+            else
+            {
+                <h1>ERROR 101 KAOS. ABBE LÖS</h1>
+            }
+
+        </div>
+        <div class="col">
+            <p>
+                @selectedEvent?.Description
+            </p>
+        </div>
+    </div>
+</div>
+
+@*@if (selectedEvent != null)
 {
     string eventImage = $"/Images/{selectedEvent.Image}.png";
 
@@ -30,7 +66,7 @@
 else
 {
     <h1>ERROR 101 KAOS. ABBE LÖS</h1>
-}
+}*@
 
 
 @code {
