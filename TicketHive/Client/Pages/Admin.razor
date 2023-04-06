@@ -4,6 +4,37 @@
 
 <h3>Admin</h3>
 
-@code {
+<p>Här ska det finnas textfält för att skapa ett nytt evenemang.</p>
+<p>Name: </p>
+<p>Description: </p>
+<p>EventType: </p>
+<p>Location: </p>
+<p>Date: </p>
+<p>Ticket price: </p>
+<p>Max attendees: </p>
 
+<button>Lägg till nytt evenemang</button>
+
+<label for="deleteEvent">Delete event:</label>
+<select id="deleteEvent" @onchange="DeleteEvent">
+    <option value=""></option>
+    <option value="">Event 1</option>
+    <option value="">Event 2</option>
+    <option value="">Event 3</option>
+    <option value="">Event 4</option>
+    <option value="">Event 5</option>
+    <option value="">Event 6</option>
+</select>
+
+
+@code {
+    private void FillEventMenu()
+    {
+        // Här ska en foreach lägga in alla events i databasen i dropdown menyn.
+    }
+
+    private void DeleteEvent(ChangeEventArgs e)
+    {
+        // Här ska knappen ta bort det event man har valt
+    }
 }
