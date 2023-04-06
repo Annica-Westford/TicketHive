@@ -16,6 +16,7 @@ builder.Services.AddHttpClient("TicketHive.ServerAPI", client => client.BaseAddr
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("TicketHive.ServerAPI"));
 
 builder.Services.AddScoped<IEventsService, EventsService>();
+builder.Services.AddScoped<IIdentityService, IdentityService>();
 
 builder.Services.AddApiAuthorization();
 

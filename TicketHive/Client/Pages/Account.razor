@@ -1,20 +1,53 @@
 ﻿@page "/account"
 @using Microsoft.AspNetCore.Authorization;
 @attribute [Authorize]
+@inject IIdentityService identityService
+@inject AuthenticationStateProvider authStateProvider
 
 <h3>Account</h3>
+<h2>Change Password</h2>
 
-<p>Här ska finnas 3 textfält för att skriva nuvarande, nytt, konfirmera nytt lösenord.</p>
+<form @onsubmit="HandleSubmit">
+    <div class="form-group">
+        <label for="currentPassword">Current Password</label>
+        <input type="password" class="form-control" id="currentPassword" @bind="@CurrentPassword" />
+    </div>
 
-<p>Nuvarande lösenord:</p>
-<input type="text" placeholder="" value=""/>
-<p>Nytt lösenord:</p>
-<input type="text" placeholder="" value="" />
-<p>Konfirmera nytt lösenord:</p>
-<input type="text" placeholder="" value="" />
+    <div class="form-group">
+        <label for="newPassword">New Password</label>
+        <input type="password" class="form-control" id="newPassword" @bind="@NewPassword" />
+    </div>
 
-<button>Apply</button>
+    <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" class="form-control" id="confirmPassword" @bind="@ConfirmPassword" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Change Password</button>
+</form>
 
 @code {
+    private string CurrentPassword { get; set; }
+    private string NewPassword { get; set; }
+    private string ConfirmPassword { get; set; }
 
+    private async Task HandleSubmit()
+    {
+        var authState = await authStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var userName = user.Identity!.Name;
+
+        if (userName != null)
+        {            
+            var hasChangedPasswordSuccessfully = await identityService.ChangePasswordAsync(userName, CurrentPassword, NewPassword);
+
+            if (hasChangedPasswordSuccessfully)
+            {
+                //Visa meddelande att lösenordet är ändrat
+
+                //behöver förmodligen lägga till detta i repo/controller/service
+                //await SignInManager.RefreshSignInAsync(user);
+            }
+        }
+    }
 }
