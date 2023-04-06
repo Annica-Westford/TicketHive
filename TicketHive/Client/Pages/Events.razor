@@ -11,6 +11,7 @@
 {
     fillButton = searchWord;
 }
+
 <input @oninput="FilterEvents" type="text" placeholder="Search..." value="@fillButton" />
 
 <label for="sortSelect">Sort by:</label>
@@ -41,10 +42,10 @@
 
             string eventImage = $"/Images/{eventToDisplay.Image}.png";
             <div class="image-container">
-                <h1>@eventToDisplay.Name</h1>
+                <img src="@eventImage" />
+                <h2>@eventToDisplay.Name</h2>
                 <h3>Date: @eventToDisplay.DateTime</h3>
                 <h3>Price: @eventToDisplay.TicketPrice</h3>
-                <img src="@eventImage" />
                 <p>Tickets left: @ticketsText</p>
                 <button class="btn btn-primary" @onclick="(() => ShowEvent(eventToDisplay.Id))">Read more</button>
             </div>

@@ -1,0 +1,158 @@
+﻿body {
+}
+
+.attending {
+    padding-left: 0px;
+    text-align: center;
+    color: white;
+}
+
+.popular-events {
+    display: flex;
+    justify-content: center;
+    color: white;
+    margin-top: 10rem;
+}
+
+#sortSelect {
+
+}
+
+.image-container {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    padding: 10px;
+    border: 1px solid black;
+    box-shadow: 0px 0px 10px black;
+    border-radius: 5px 5px;
+    background-color: #fbe89c;    
+}
+
+.row {
+    display: flex;
+    gap: 20px;
+}
+
+    .row.movie-list {
+        margin-top: 30px;
+        justify-content: center;
+        color: white;
+        padding-bottom: 10rem;
+    }
+
+        .row.movie-list h3 {
+            margin: 10px auto;
+        }
+
+#title {
+    text-align: center;
+    margin-top: 35vh;
+    color: white;
+}
+
+.search {
+    display: block;
+    justify-content: center;
+    gap: 10px;
+}
+
+    .search input {
+        min-width: 30%;
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+#sortSelect {
+    margin-bottom:3rem;
+}
+
+.fullscreen video {
+    object-fit: cover;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: -1;
+}
+
+.fullscreen .background {
+    background-color: #fbe89c;
+    object-fit: cover;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: -1;
+}
+
+.image-container .btn {
+    color: #fbe89c;
+}
+
+.image-container img {
+    border-top-left-radius: 5%;
+    border-top-right-radius: 5%;
+}
+
+article h1 {
+    margin-top: 30px;
+}
+
+#searchbar {
+    display: block;
+    width: 100%;
+}
+
+#searchbtn {
+    display: inline;
+    margin-top: 15px;
+}
+
+a {
+    color: white;
+}
+
+    a:hover {
+        color: #fbe89c;
+    }
+
+#eventbtn {
+    display: inline;
+    margin-top: 15px;
+    margin-left: 15px;
+}
+
+@media (min-width: 576px) {
+    .search {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    #searchbtn {
+        display: inline;
+        margin-top: 0px;
+    }
+
+    #eventbtn {
+        display: inline;
+        margin-top: 0px;
+        margin-left: 0px;
+    }
+
+    #searchbar {
+        display: inline-block;
+        width: 30%;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    h3 {
+        font-size: 1.1rem;
+    }
+}

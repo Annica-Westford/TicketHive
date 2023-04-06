@@ -6,29 +6,29 @@
 @inject AuthenticationStateProvider provider
 @inject NavigationManager navigationManager
 
+<h1 id="title">Search for your next event</h1>
 <div class="search">
-    <input type="text" @bind-value="@searchWord" placeholder="Keyword" />
-
-    <button class="btn btn-primary" @onclick="@(() => SearchForEvent())">Search</button>
+    <input id="searchbar" type="text" @bind-value="@searchWord" placeholder="Keyword" />
+    <button id="searchbtn" class="btn btn-primary" @onclick="@(() => SearchForEvent())">Search</button>
+    <button id="eventbtn" class="btn btn-primary" @onclick="(() => ShowAllEvents())">Show all events</button>
 </div>
-
-
 @if (eventsBought != null)
 {
-    <h1>Events you are attending:</h1>
+    <p class="attending">You are already attending: 
 
-    foreach (var eventBought in eventsBought)
+    @foreach (var eventBought in eventsBought)
     {
-        <h3 class="attending">@eventBought.Name</h3>
+            string eventHref = $"/eventdetails/{eventBought.Id}";
+            <span><a href="@eventHref">@eventBought.Name</a>, </span>
     }
+    </p>
 }
 
 
-<h1 class="popular-events">Most popular events:</h1>
 
 @if (popularEvents != null)
 {
-   
+    <h1 class="popular-events">Most popular events:</h1>
     <div class="row movie-list">
         @foreach (var eventToDisplay in popularEvents)
     {
@@ -42,13 +42,11 @@
     </div>
 }
 
-<button class="btn btn-primary" @onclick="(() => ShowAllEvents())">Show all events</button>
-
 <div class="fullscreen">
     <div class="background"></div>
-    @*<video loop muted autoplay>
-        <source src="/video2.mp4" type="video/mp4">
-    </video>*@
+    <video loop muted autoplay>
+        <source src="/video3.mp4" type="video/mp4">
+    </video>
 </div>
 
 @code {
