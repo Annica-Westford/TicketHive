@@ -6,7 +6,7 @@
 @inject AuthenticationStateProvider provider
 @inject NavigationManager navigationManager
 
-<div>
+<div class="search">
     <input type="text" @bind-value="@searchWord" placeholder="Keyword" />
 
     <button class="btn btn-primary" @onclick="@(() => SearchForEvent())">Search</button>
@@ -19,16 +19,17 @@
 
     foreach (var eventBought in eventsBought)
     {
-        <h3>@eventBought.Name</h3>
+        <h3 class="attending">@eventBought.Name</h3>
     }
 }
 
 
-<h1>Most popular events:</h1>
+<h1 class="popular-events">Most popular events:</h1>
 
 @if (popularEvents != null)
 {
-    <div class="row">
+   
+    <div class="row movie-list">
         @foreach (var eventToDisplay in popularEvents)
     {
         string eventImage = $"/Images/{eventToDisplay.Image}.png";
@@ -42,6 +43,13 @@
 }
 
 <button class="btn btn-primary" @onclick="(() => ShowAllEvents())">Show all events</button>
+
+<div class="fullscreen">
+    <div class="background"></div>
+    @*<video loop muted autoplay>
+        <source src="/video2.mp4" type="video/mp4">
+    </video>*@
+</div>
 
 @code {
 
