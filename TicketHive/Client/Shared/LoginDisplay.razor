@@ -2,6 +2,9 @@
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @inject NavigationManager Navigation
 
+<AuthorizeView Roles="Admin">
+        <a href="/admin">Admin panel</a>
+</AuthorizeView>
 <AuthorizeView>
     <Authorized>
         <a href="/account">Hello, @context.User.Identity?.Name!</a>
