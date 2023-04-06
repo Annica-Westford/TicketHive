@@ -23,6 +23,10 @@
     {
         disableCartButton = true;
     }
+    else
+    {
+        disableCartButton = false;
+    }
 
     <button disabled="@disableCartButton" class="btn btn-primary" @onclick="(() => AddToCart())">Add to cart</button>
 
@@ -37,7 +41,7 @@ else
     [Parameter]
     public int Id { get; set; }
     private EventModel? selectedEvent;
-    bool disableCartButton = false;
+    bool disableCartButton;
 
     protected override async Task OnInitializedAsync()
     {
@@ -46,7 +50,7 @@ else
 
     private void GoBack()
     {
-        navigationManager.NavigateTo($"/home");
+        navigationManager.NavigateTo($"/events");
     }
 
     private async Task AddToCart()

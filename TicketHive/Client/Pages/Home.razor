@@ -41,6 +41,8 @@
     </div>
 }
 
+<button class="btn btn-primary" @onclick="(() => ShowAllEvents())">Show all events</button>
+
 @code {
 
     private List<EventModel>? popularEvents;
@@ -64,6 +66,11 @@
     void ShowEvent(int id)
     {
         navigationManager.NavigateTo($"/eventdetails/{id}");
+    }
+
+    void ShowAllEvents()
+    {
+        navigationManager.NavigateTo("/events");
     }
 
     void SearchForEvent()
