@@ -4,7 +4,7 @@
 @attribute [Authorize]
 @inject IEventsService eventsService
 @inject NavigationManager navigationManager
-@inject ILocalStorageService localStorageService
+@inject ILocalStorageService localStorage
 
 <button class="btn btn-primary" @onclick="(() => GoBack())">BACK</button>
 
@@ -78,6 +78,7 @@ else
     public int Id { get; set; }
     private EventModel? selectedEvent;
     bool disableCartButton;
+    private List<int>? shoppingCartItems;
 
     protected override async Task OnInitializedAsync()
     {
@@ -94,5 +95,24 @@ else
         // här ska eventet läggas till i cart
         //efter varje tillagt event måste man kolla om eventet har uppnåt max capacity
         // om man uppnått max capacity så ska eventets button bli disabled
+        selectedEvent.SoldTickets++;
+
+        shoppingCartItems = await localStorage.GetItemAsync<List<int>>("shoppingCartItems");
+
+        if (shoppingCartItems == null)
+        {
+            shoppingCartItems = new List<int>();
+        }
+
+        shoppingCartItems.Add(selectedEvent.Id);
+        
+        await localStorage.SetItemAsync("shoppingCartItems", shoppingCartItems);
+
+        if (selectedEvent.SoldTickets >= selectedEvent.MaxCapacity)
+        {
+            //Detta måste sparas i databasen, annars visas fel info på alla andra sidor
+            //Betyder att om användaren inte genomför en bokning måste det ändras tillbaka igen i databasen
+            selectedEvent.IsFullyBooked = true;
+        }
     }
 }
