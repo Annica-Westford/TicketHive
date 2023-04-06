@@ -27,5 +27,17 @@ namespace TicketHive.Server.Repos.UsersRepo
         {
             return await signInManager.UserManager.CreateAsync(newUser, password);
         }
+
+        public async Task<IdentityResult> ChangePasswordAsync(string username, string currentPassword, string newPassword)
+        {
+            var user = await signInManager.UserManager.FindByNameAsync(username);
+
+            if (user != null)
+            {
+                return await signInManager.UserManager.ChangePasswordAsync(user, currentPassword, newPassword);
+            }
+
+            return IdentityResult.Failed(new IdentityError { Description = "User not found." });
+        }
     }
 }

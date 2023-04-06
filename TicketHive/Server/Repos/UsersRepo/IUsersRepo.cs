@@ -8,5 +8,7 @@ namespace TicketHive.Server.Repos.UsersRepo
         Task<SignInResult> SignInUserWithUserName(string username, string password, bool isPersistent, bool lockOutOnFailure);
         Task<IdentityResult> RegisterNewUser(ApplicationUser newUser, string password);
         Task<SignInResult> SignInUser(ApplicationUser newUser, string password, bool isPersistent, bool lockOutOnFailure);
+        Task<IdentityResult> ChangePasswordAsync(string username, string currentPassword, string newPassword);
+
     }
 }
