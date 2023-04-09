@@ -1,41 +1,117 @@
 ﻿@page "/checkout"
 @using Microsoft.AspNetCore.Authorization;
+@using System.Text.Json;
+@using TicketHive.Shared;
 @attribute [Authorize]
+@inject AuthenticationStateProvider provider
+@inject NavigationManager navigationManager
+@inject ILocalStorageService localStorage
+@inject CartService cartService
+@inject IEventsService eventsService
 
-<h3>Checkout</h3>
+<button class="btn btn-primary" @onclick="(() => GoBack())">BACK</button>
 
-@*@if (events != null)
+<h1>Checkout</h1>
+
+@if (shoppingCart.Count > 0)
 {
-        <div class="row">
-        @foreach (var eventToDisplay in events)
+<table class="table">
+    <thead>
+        <tr>
+        <th>Event</th>
+            <th>Ticket Price</th>
+            <th>Quantity</th>
+            <th>Event Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in shoppingCart)
         {
-            string eventImage = $"/Images/{eventToDisplay.Image}.png";
-                    <div class="image-container">
-                        <h3>@eventToDisplay.Name</h3>
-                        <img src="@eventImage" />
-                        <button class="btn btn-primary" @onclick="(() => AddEventToUser(eventToDisplay.Id))">Click me</button>
-                    </div>
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.TicketPrice</td>
+                    <td>
+
+                        <button class="btn btn-primary" @onclick="(() => IncreaseQuantity(Quantity))">+</button>
+                    @Quantity
+                        <button class="btn btn-primary" @onclick="(() => DecreaseQuantity(Quantity, item))">-</button>
+                    </td>
+                <td>@(item.TicketPrice * Quantity)</td>
+                </tr>
+                @*<button class="btn btn-primary" @onclick="(() => AddEventToUser(item.Id))">Purchase</button>*@
         }
-        </div>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" style="text-align: right"><strong>Order Total:</strong></td>
+                <td>@shoppingCart.Sum(item => item.TicketPrice * Quantity)</td>
+        </tr>
+    </tfoot>
+</table>
+
 }
 
+else
+{
+    <p>Your cart is empty dawg.</p>
+}
 
 @code {
-    private List<EventModel>? events;
+    private List<EventModel> shoppingCart = new List<EventModel>();
+    private int Quantity = 1;
     private string loggedInUserUsername;
 
     protected override async Task OnInitializedAsync()
     {
-        events = await eventsService.GetAllEventsAsync();
-
         var authState = await provider.GetAuthenticationStateAsync();
         loggedInUserUsername = authState.User.Identity.Name;
 
+        var itemsJson = await localStorage.GetItemAsStringAsync("shoppingCart");
+        if (!string.IsNullOrEmpty(itemsJson))
+        {
+            shoppingCart = JsonSerializer.Deserialize<List<EventModel>>(itemsJson);
+        }
     }
 
-    private async Task AddEventToUser(int id)
+    private void IncreaseQuantity(int quantity)
     {
-
-        await eventsService.AddEventToUserAsync(loggedInUserUsername, id);
+        Quantity++;
+        SaveCart();
     }
-}*@
+
+    private void DecreaseQuantity(int quantity, EventModel item)
+    {
+        if (Quantity > 1)
+        {
+            Quantity--;
+            SaveCart();
+        }
+        else
+        {
+            shoppingCart.Remove(item);
+            cartService.CartCounterUpdate(-1);
+            SaveCart();
+        }
+    }
+
+    private async Task SaveCart()
+    {
+        var itemsJson = JsonSerializer.Serialize(shoppingCart);
+        await localStorage.SetItemAsStringAsync("shoppingCart", itemsJson);
+        StateHasChanged();
+    }
+
+    private void GoBack()
+    {
+        navigationManager.NavigateTo($"/events");
+    }
+
+    // Avaktiverad så att vi inte gör kaos i databasen
+    //private async Task AddEventToUser(int id)
+    //{
+    //    await eventsService.AddEventToUserAsync(loggedInUserUsername, id);
+    //    shoppingCart.Clear();
+    //    cartService.CartCounterReset();
+    //    SaveCart();
+    //}
+}

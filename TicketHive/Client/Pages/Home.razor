@@ -5,6 +5,8 @@
 @inject IEventsService eventsService 
 @inject AuthenticationStateProvider provider
 @inject NavigationManager navigationManager
+@inject ILocalStorageService localStorage
+@inject CartService cartService
 
 <h1 id="title">Search for your next event</h1>
 <div class="search">
@@ -23,8 +25,6 @@
     }
     </p>
 }
-
-
 
 @if (popularEvents != null)
 {
@@ -51,7 +51,7 @@
 
 @code {
 
-    private List<EventModel>? popularEvents;
+    private List<EventModel>? popularEvents = null;
     private List<EventModel>? eventsBought;
     private string searchWord;
 
@@ -67,6 +67,14 @@
         var name = authState.User.Identity.Name;
         eventsBought = await eventsService.GetAllEventsFromUserAsync(name);
 
+        // Clearar gamla cookies och tickets tillagda om vi vill
+        await ClearCookies();
+        cartService.CartCounterReset();
+    }
+
+    private async Task ClearCookies()
+    {
+        await localStorage.ClearAsync();
     }
 
     void ShowEvent(int id)

@@ -1,17 +1,20 @@
 ﻿@page "/eventdetails/{id:int}"
 @using Microsoft.AspNetCore.Authorization;
+@using System.Text.Json;
 @using TicketHive.Shared;
 @attribute [Authorize]
+@inject AuthenticationStateProvider provider
 @inject IEventsService eventsService
 @inject NavigationManager navigationManager
 @inject ILocalStorageService localStorage
+@inject CartService cartService
 
 <button class="btn btn-primary" @onclick="(() => GoBack())">BACK</button>
-
 
 <div class="container">
     <div class="row">
         <div class="col">
+
             @if (selectedEvent != null)
             {
                 string eventImage = $"/Images/{selectedEvent.Image}.png";
@@ -21,18 +24,25 @@
                 <img src="@eventImage" />
                 <h3>Location: @selectedEvent.Location</h3>
                 <h4>Date: @selectedEvent.DateTime</h4>
-                <p>@selectedEvent.Description</p>               
-                if (selectedEvent.IsFullyBooked)
+
+                // Om eventet redan ligger i varukorgen
+                if (isEventInCart)
                 {
-                    disableCartButton = true;
+                    <button disabled class="btn btn-primary">Event already in cart!</button>
                 }
 
-                <button disabled="@disableCartButton" class="btn btn-primary" @onclick="(() => AddToCart())">Add to cart</button>
+                // Om eventet är fullbokat
+                else if (selectedEvent.IsFullyBooked)
+                {
+                    <button disabled class="btn btn-primary">SOLD OUT</button>
+                }
 
-            }
-            else
-            {
-                <h1>ERROR 101 KAOS. ABBE LÖS</h1>
+                // Annars kan man klicka på lägg till i varukorgen
+                else
+                {
+                    <button class="btn btn-primary" @onclick="(() => AddToCart())">Add event</button>
+                }
+
             }
 
         </div>
@@ -44,45 +54,27 @@
     </div>
 </div>
 
-@*@if (selectedEvent != null)
-{
-    string eventImage = $"/Images/{selectedEvent.Image}.png";
-
-    <h1>@selectedEvent.Name</h1>
-    <h2>Sold tickets: @selectedEvent.SoldTickets</h2>
-    <img src="@eventImage" />
-    <h3>Location: @selectedEvent.Location</h3>
-    <h4>Date: @selectedEvent.DateTime</h4>
-    <p>@selectedEvent.Description</p>
-
-    if (selectedEvent.IsFullyBooked)
-    {
-        disableCartButton = true;
-    }
-    else
-    {
-        disableCartButton = false;
-    }
-
-    <button disabled="@disableCartButton" class="btn btn-primary" @onclick="(() => AddToCart())">Add to cart</button>
-
-}
-else
-{
-    <h1>ERROR 101 KAOS. ABBE LÖS</h1>
-}*@
-
-
 @code {
     [Parameter]
     public int Id { get; set; }
     private EventModel? selectedEvent;
-    bool disableCartButton;
-    private List<int>? shoppingCartItems;
+    bool isEventInCart = false;
+
+    // Skapar kundvagnen
+    private List<EventModel> shoppingCart = new List<EventModel>();
 
     protected override async Task OnInitializedAsync()
     {
         selectedEvent = await eventsService.GetEventByIdAsync(Id);
+
+        // Laddar kundvagnen när sidan laddar om det finns saker i den
+        var itemsJson = await localStorage.GetItemAsStringAsync("shoppingCart");
+        if (!string.IsNullOrEmpty(itemsJson))
+        {
+            shoppingCart = JsonSerializer.Deserialize<List<EventModel>>(itemsJson);
+        }
+
+        CheckIfEventInCart();
     }
 
     private void GoBack()
@@ -92,27 +84,17 @@ else
 
     private async Task AddToCart()
     {
-        // här ska eventet läggas till i cart
-        // efter varje tillagt event måste man kolla om eventet har uppnåt max capacity
-        // om man uppnått max capacity så ska eventets button bli disabled
-        selectedEvent.SoldTickets++;
+        shoppingCart.Add(selectedEvent);
+        await localStorage.SetItemAsStringAsync("shoppingCart", JsonSerializer.Serialize(shoppingCart));
+        cartService.CartCounterUpdate(+1);
+        CheckIfEventInCart();
+    }
 
-        shoppingCartItems = await localStorage.GetItemAsync<List<int>>("shoppingCartItems");
-
-        if (shoppingCartItems == null)
+    private void CheckIfEventInCart()
+    {
+        if (shoppingCart.Contains(selectedEvent))
         {
-            shoppingCartItems = new List<int>();
-        }
-
-        shoppingCartItems.Add(selectedEvent.Id);
-        
-        await localStorage.SetItemAsync("shoppingCartItems", shoppingCartItems);
-
-        if (selectedEvent.SoldTickets >= selectedEvent.MaxCapacity)
-        {
-            //Detta måste sparas i databasen, annars visas fel info på alla andra sidor
-            //Betyder att om användaren inte genomför en bokning måste det ändras tillbaka igen i databasen
-            selectedEvent.IsFullyBooked = true;
+            isEventInCart = true;
         }
     }
 }

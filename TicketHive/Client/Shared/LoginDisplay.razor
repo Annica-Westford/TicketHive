@@ -1,12 +1,20 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-@inject NavigationManager Navigation
+@inject NavigationManager navigationManager
+@inject CartService cartservice
 
 <AuthorizeView Roles="Admin">
         <a href="/admin">Admin panel</a>
 </AuthorizeView>
 <AuthorizeView>
     <Authorized>
+        <div class="cart-icon-container" @onclick="GoToCheckout">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/d/df/Shopping_cart_icon.svg" alt="Cart" />
+            @if (cartservice.ItemCount > 0)
+            {
+                <span class="cart-item-count">@cartservice.ItemCount</span>
+            }
+        </div>
         <a href="/home">Home</a>
         <a href="/account">Hello, @context.User.Identity?.Name!</a>
         <button class="nav-link btn btn-link" @onclick="BeginLogOut">Log out</button>
@@ -20,6 +28,11 @@
 @code{
     private void BeginLogOut()
     {
-        Navigation.NavigateToLogout("authentication/logout");
+        navigationManager.NavigateToLogout("authentication/logout");
+    }
+
+    private void GoToCheckout()
+    {
+        navigationManager.NavigateTo("/checkout");
     }
 }
