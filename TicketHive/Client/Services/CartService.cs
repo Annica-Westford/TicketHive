@@ -1,18 +1,53 @@
-﻿namespace TicketHive.Client.Services
+﻿using Blazored.LocalStorage;
+using TicketHive.Shared;
+
+namespace TicketHive.Client.Services
 {
-    public class CartService
+    public class CartService : ICartService
     {
-        public int ItemCount { get; private set; }
+        private readonly ILocalStorageService localStorage;
+        private List<CartItemModel> shoppingCart;
 
-        // Inte ett bra system, vill hellre ha ett som är baserat på antalet events i korgen
-        public void CartCounterUpdate(int newCounter)
+        public CartService(ILocalStorageService localStorage)
         {
-            ItemCount += newCounter;
+            this.localStorage = localStorage;
         }
 
-        public void CartCounterReset()
+        public async Task LoadCookies()
         {
-            ItemCount = 0;
+            shoppingCart = await localStorage.GetItemAsync<List<CartItemModel>>("shoppingCartCookie");
+
+            if (shoppingCart == null)
+            {
+                await localStorage.SetItemAsync<List<CartItemModel>>("shoppingCartCookie", new List<CartItemModel>());
+                shoppingCart = await localStorage.GetItemAsync<List<CartItemModel>>("shoppingCartCookie");
+            }
         }
+
+        public List<CartItemModel> GetShoppingCartItems()
+        {
+            return shoppingCart;
+        }
+
+        // Lägg till i cart
+        public async Task AddToCartAsync(EventModel addEvent)
+        {
+            CartItemModel newCartItem = new()
+            {
+                Event = addEvent,
+                Quantity = 1
+            };
+
+            shoppingCart.Add(newCartItem);
+            await localStorage.SetItemAsync<List<CartItemModel>>("shoppingCartCookie", shoppingCart);
+        }
+
+        // Ta bort från cart
+        public async Task RemoveFromCartAsync(CartItemModel removeItem)
+        {
+            shoppingCart.Remove(removeItem);
+            await localStorage.SetItemAsync<List<CartItemModel>>("shoppingCartCookie", shoppingCart);
+        }
+
     }
 }

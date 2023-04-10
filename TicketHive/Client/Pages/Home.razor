@@ -6,7 +6,7 @@
 @inject AuthenticationStateProvider provider
 @inject NavigationManager navigationManager
 @inject ILocalStorageService localStorage
-@inject CartService cartService
+@inject ICartService cartService
 
 <h1 id="title">Search for your next event</h1>
 <div class="search">
@@ -68,8 +68,7 @@
         eventsBought = await eventsService.GetAllEventsFromUserAsync(name);
 
         // Clearar gamla cookies och tickets tillagda om vi vill
-        await ClearCookies();
-        cartService.CartCounterReset();
+        //await ClearCookies();
     }
 
     private async Task ClearCookies()

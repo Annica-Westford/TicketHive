@@ -4,10 +4,10 @@
 @using TicketHive.Shared;
 @attribute [Authorize]
 @inject AuthenticationStateProvider provider
-@inject IEventsService eventsService
 @inject NavigationManager navigationManager
+@inject IEventsService eventsService
 @inject ILocalStorageService localStorage
-@inject CartService cartService
+@inject ICartService cartService
 
 <button class="btn btn-primary" @onclick="(() => GoBack())">BACK</button>
 
@@ -26,9 +26,9 @@
                 <h4>Date: @selectedEvent.DateTime</h4>
 
                 // Om eventet redan ligger i varukorgen
-                if (isEventInCart)
+                if (IsEventInCart())
                 {
-                    <button disabled class="btn btn-primary">Event already in cart!</button>
+                    <button disabled class="btn btn-primary">Event added in cart!</button>
                 }
 
                 // Om eventet är fullbokat
@@ -40,7 +40,7 @@
                 // Annars kan man klicka på lägg till i varukorgen
                 else
                 {
-                    <button class="btn btn-primary" @onclick="(() => AddToCart())">Add event</button>
+                    <button class="btn btn-primary" @onclick="(() => AddToCart(selectedEvent))">Add event</button>
                 }
 
             }
@@ -58,23 +58,14 @@
     [Parameter]
     public int Id { get; set; }
     private EventModel? selectedEvent;
-    bool isEventInCart = false;
-
-    // Skapar kundvagnen
-    private List<EventModel> shoppingCart = new List<EventModel>();
 
     protected override async Task OnInitializedAsync()
     {
+        // Laddar cookies
+        await cartService.LoadCookies();
+
+        // Laddar rätt event man klickat in på
         selectedEvent = await eventsService.GetEventByIdAsync(Id);
-
-        // Laddar kundvagnen när sidan laddar om det finns saker i den
-        var itemsJson = await localStorage.GetItemAsStringAsync("shoppingCart");
-        if (!string.IsNullOrEmpty(itemsJson))
-        {
-            shoppingCart = JsonSerializer.Deserialize<List<EventModel>>(itemsJson);
-        }
-
-        CheckIfEventInCart();
     }
 
     private void GoBack()
@@ -82,19 +73,20 @@
         navigationManager.NavigateTo($"/events");
     }
 
-    private async Task AddToCart()
+    private async Task AddToCart(EventModel selectedEvent)
     {
-        shoppingCart.Add(selectedEvent);
-        await localStorage.SetItemAsStringAsync("shoppingCart", JsonSerializer.Serialize(shoppingCart));
-        cartService.CartCounterUpdate(+1);
-        CheckIfEventInCart();
+        await cartService.AddToCartAsync(selectedEvent);
     }
 
-    private void CheckIfEventInCart()
+    private bool IsEventInCart()
     {
-        if (shoppingCart.Contains(selectedEvent))
+        foreach (var item in cartService.GetShoppingCartItems())
         {
-            isEventInCart = true;
+            if (item.Event.Id == Id)
+            {
+                return true;
+            }
         }
+        return false;
     }
 }
