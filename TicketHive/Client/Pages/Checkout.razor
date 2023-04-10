@@ -5,95 +5,99 @@
 @attribute [Authorize]
 @inject AuthenticationStateProvider provider
 @inject NavigationManager navigationManager
-@inject ILocalStorageService localStorage
-@inject CartService cartService
 @inject IEventsService eventsService
+@inject ILocalStorageService localStorage
+@inject ICartService cartService
 
 <button class="btn btn-primary" @onclick="(() => GoBack())">BACK</button>
 
-<h1>Checkout</h1>
-
-@if (shoppingCart.Count > 0)
+@if (shoppingCart != null)
 {
-<table class="table">
-    <thead>
-        <tr>
-        <th>Event</th>
-            <th>Ticket Price</th>
-            <th>Quantity</th>
-            <th>Event Total</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in shoppingCart)
-        {
+    if (shoppingCart.Count > 0)
+    {
+        <h1>Checkout</h1>
+
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@item.Name</td>
-                    <td>@item.TicketPrice</td>
-                    <td>
-
-                        <button class="btn btn-primary" @onclick="(() => IncreaseQuantity(Quantity))">+</button>
-                    @Quantity
-                        <button class="btn btn-primary" @onclick="(() => DecreaseQuantity(Quantity, item))">-</button>
-                    </td>
-                <td>@(item.TicketPrice * Quantity)</td>
+                <th>Event</th>
+                    <th>Ticket Price</th>
+                    <th>Quantity</th>
+                    <th>Event Total</th>
                 </tr>
-                @*<button class="btn btn-primary" @onclick="(() => AddEventToUser(item.Id))">Purchase</button>*@
-        }
-    </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="3" style="text-align: right"><strong>Order Total:</strong></td>
-                <td>@shoppingCart.Sum(item => item.TicketPrice * Quantity)</td>
-        </tr>
-    </tfoot>
-</table>
+            </thead>
+            <tbody>
+                @foreach (var item in shoppingCart)
+                {
+                    <tr>
+                        <td>@item.Event.Name</td>
+                        <td>@item.Event.TicketPrice</td>
+                        <td>
 
+                            <button class="btn btn-primary" @onclick="(() => item.Quantity++)">+</button>
+                        @item.Quantity
+                            <button class="btn btn-primary" @onclick="(() => DecreaseQuantity(item))">-</button>
+                        </td>
+                    <td>@(item.Event.TicketPrice * item.Quantity)</td>
+                    </tr>
+                    @*<button class="btn btn-primary" @onclick="(() => AddEventToUser(item.Id))">Purchase</button>*@
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" style="text-align: right"><strong>Order Total:</strong></td>
+                        <td>@shoppingCart.Sum(item => item.Event.TicketPrice * item.Quantity)</td>
+                </tr>
+            </tfoot>
+        </table>
+
+    }
+    else
+    {
+        <p>Your cart is empty dawg.</p>
+    }
 }
-
 else
 {
     <p>Your cart is empty dawg.</p>
 }
 
+
 @code {
-    private List<EventModel> shoppingCart = new List<EventModel>();
-    private int Quantity = 1;
+    private List<CartItemModel>? shoppingCart;
+
+    // Behöver ha inloggarens identity för att lägga till i databasen?
     private string loggedInUserUsername;
 
     protected override async Task OnInitializedAsync()
     {
+        // Identity checkar läget så allt är chill
         var authState = await provider.GetAuthenticationStateAsync();
         loggedInUserUsername = authState.User.Identity.Name;
 
-        var itemsJson = await localStorage.GetItemAsStringAsync("shoppingCart");
-        if (!string.IsNullOrEmpty(itemsJson))
-        {
-            shoppingCart = JsonSerializer.Deserialize<List<EventModel>>(itemsJson);
-        }
+        // Detta är gamla shoppingCart. Nya ska bara sätta shoppingCart till GetShoppingCartItems()?
+        shoppingCart = cartService.GetShoppingCartItems();
     }
 
-    private void IncreaseQuantity(int quantity)
+    private void UpdateCartItems()
     {
-        Quantity++;
-        SaveCart();
+        shoppingCart = cartService.GetShoppingCartItems();
     }
 
-    private void DecreaseQuantity(int quantity, EventModel item)
+    // Samma som ovan, fast ta bort item
+    private void DecreaseQuantity(CartItemModel cartItem)
     {
-        if (Quantity > 1)
+        if (cartItem.Quantity > 1)
         {
-            Quantity--;
-            SaveCart();
+            cartItem.Quantity--;
         }
         else
         {
-            shoppingCart.Remove(item);
-            cartService.CartCounterUpdate(-1);
-            SaveCart();
+            cartService.RemoveFromCartAsync(cartItem);
         }
     }
 
+    // Denna metoden kan kalla på typ UpdateCart i CartService för att uppdatera cookie med quantity utan att lägga till något nytt event, OM quantity verkligen ska sparas
     private async Task SaveCart()
     {
         var itemsJson = JsonSerializer.Serialize(shoppingCart);
@@ -106,12 +110,11 @@ else
         navigationManager.NavigateTo($"/events");
     }
 
-    // Avaktiverad så att vi inte gör kaos i databasen
-    //private async Task AddEventToUser(int id)
-    //{
-    //    await eventsService.AddEventToUserAsync(loggedInUserUsername, id);
-    //    shoppingCart.Clear();
-    //    cartService.CartCounterReset();
-    //    SaveCart();
-    //}
+    // När man trycker på köpknappen. Avaktiverad så att vi inte gör kaos i databasen
+    private async Task AddEventToUser(int id)
+    {
+        //await eventsService.AddEventToUserAsync(loggedInUserUsername, id);
+        //shoppingCart.Clear();
+        //SaveCart();
+    }
 }
