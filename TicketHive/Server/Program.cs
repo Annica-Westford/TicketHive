@@ -37,48 +37,48 @@ builder.Services.AddAuthentication()
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-//skapa en instans av ServiceProvider så att vi kan komma åt allt som ligger i DI container
+//skapa en instans av ServiceProvider sï¿½ att vi kan komma ï¿½t allt som ligger i DI container
 using (var serviceProvider = builder.Services.BuildServiceProvider())
 {
-    //Hämta instanser från DI containern (context, signInManager och roleManager)
+    //Hï¿½mta instanser frï¿½n DI containern (context, signInManager och roleManager)
     var context = serviceProvider.GetRequiredService<AuthDbContext>();
     var signInManager = serviceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
     var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-    //säkerställ att databasen är skapad, annars skapa den
+    //sï¿½kerstï¿½ll att databasen ï¿½r skapad, annars skapa den
     context.Database.Migrate();
 
     ApplicationUser? adminUser = signInManager.UserManager.FindByNameAsync("admin").GetAwaiter().GetResult();
 
-    //om vi inte hittar en användare med användarnamnet admin
+    //om vi inte hittar en anvï¿½ndare med anvï¿½ndarnamnet admin
     if (adminUser == null)
     {
-        //skapa en användare-instans med "admin" username
+        //skapa en anvï¿½ndare-instans med "admin" username
         adminUser = new()
         {
             UserName = "admin",
         };
 
-        //skapa en användare 
+        //skapa en anvï¿½ndare 
         signInManager.UserManager.CreateAsync(adminUser, "Password1234!").GetAwaiter().GetResult();
     }
 
     ApplicationUser? user = signInManager.UserManager.FindByNameAsync("user").GetAwaiter().GetResult();
 
-    //om vi inte hittar en användare med användarnamnet admin
+    //om vi inte hittar en anvï¿½ndare med anvï¿½ndarnamnet admin
     if (user == null)
     {
-        //skapa en användare-instans med "admin" username
+        //skapa en anvï¿½ndare-instans med "admin" username
         user = new()
         {
             UserName = "user",
         };
 
-        //skapa en användare 
+        //skapa en anvï¿½ndare 
         signInManager.UserManager.CreateAsync(user, "Password1234!").GetAwaiter().GetResult();
     }
 
-    //Använd roleManager för att skapa en roll med namn "Admin"
+    //Anvï¿½nd roleManager fï¿½r att skapa en roll med namn "Admin"
     IdentityRole? adminRole = roleManager.FindByNameAsync("Admin").GetAwaiter().GetResult();
 
     if (adminRole == null)
@@ -92,7 +92,7 @@ using (var serviceProvider = builder.Services.BuildServiceProvider())
         roleManager.CreateAsync(adminRole).GetAwaiter().GetResult();
     }
 
-    //Lägg till den nya adminrollen till den nya adminanvändaren
+    //Lï¿½gg till den nya adminrollen till den nya adminanvï¿½ndaren
     signInManager.UserManager.AddToRoleAsync(adminUser, "Admin").GetAwaiter().GetResult();
 }
 

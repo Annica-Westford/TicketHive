@@ -30,17 +30,18 @@
                 @foreach (var item in shoppingCart)
                 {
                     <tr>
-                        <td>@item.Event.Name</td>
+                        <td>
+                            <h4>@item.Event.Name</h4>
+                            <br><p>Tickets remaining: @(@item.Event.MaxCapacity - @item.Event.SoldTickets)</p>
+                        </td>
                         <td>@item.Event.TicketPrice</td>
                         <td>
-
-                            <button class="btn btn-primary" @onclick="(() => item.Quantity++)">+</button>
+                            <button class="btn btn-primary" @onclick="(() => cartService.IncreaseQuantity(item))">+</button>
                         @item.Quantity
-                            <button class="btn btn-primary" @onclick="(() => DecreaseQuantity(item))">-</button>
+                            <button class="btn btn-primary" @onclick="(() => cartService.DecreaseQuantity(item))">-</button>
                         </td>
                     <td>@(item.Event.TicketPrice * item.Quantity)</td>
                     </tr>
-                    @*<button class="btn btn-primary" @onclick="(() => AddEventToUser(item.Id))">Purchase</button>*@
                 }
             </tbody>
             <tfoot>
@@ -48,6 +49,7 @@
                     <td colspan="3" style="text-align: right"><strong>Order Total:</strong></td>
                         <td>@shoppingCart.Sum(item => item.Event.TicketPrice * item.Quantity)</td>
                 </tr>
+                <button class="btn btn-primary" @onclick="(() => ValidatePurchase(shoppingCart))">Purchase</button>
             </tfoot>
         </table>
 
@@ -62,7 +64,6 @@ else
     <p>Your cart is empty dawg.</p>
 }
 
-
 @code {
     private List<CartItemModel>? shoppingCart;
 
@@ -75,34 +76,8 @@ else
         var authState = await provider.GetAuthenticationStateAsync();
         loggedInUserUsername = authState.User.Identity.Name;
 
-        // Detta är gamla shoppingCart. Nya ska bara sätta shoppingCart till GetShoppingCartItems()?
+        // Hämtar alla items i shoppingcart
         shoppingCart = cartService.GetShoppingCartItems();
-    }
-
-    private void UpdateCartItems()
-    {
-        shoppingCart = cartService.GetShoppingCartItems();
-    }
-
-    // Samma som ovan, fast ta bort item
-    private void DecreaseQuantity(CartItemModel cartItem)
-    {
-        if (cartItem.Quantity > 1)
-        {
-            cartItem.Quantity--;
-        }
-        else
-        {
-            cartService.RemoveFromCartAsync(cartItem);
-        }
-    }
-
-    // Denna metoden kan kalla på typ UpdateCart i CartService för att uppdatera cookie med quantity utan att lägga till något nytt event, OM quantity verkligen ska sparas
-    private async Task SaveCart()
-    {
-        var itemsJson = JsonSerializer.Serialize(shoppingCart);
-        await localStorage.SetItemAsStringAsync("shoppingCart", itemsJson);
-        StateHasChanged();
     }
 
     private void GoBack()
@@ -110,11 +85,17 @@ else
         navigationManager.NavigateTo($"/events");
     }
 
+    private async Task ValidatePurchase(List<CartItemModel> shoppingCart)
+    {
+        // Här ska alla kontroller göras innan användaren avslutar sitt köp
+    }
+
+
     // När man trycker på köpknappen. Avaktiverad så att vi inte gör kaos i databasen
     private async Task AddEventToUser(int id)
     {
+
         //await eventsService.AddEventToUserAsync(loggedInUserUsername, id);
         //shoppingCart.Clear();
-        //SaveCart();
     }
 }

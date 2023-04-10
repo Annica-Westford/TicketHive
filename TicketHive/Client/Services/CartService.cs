@@ -42,6 +42,25 @@ namespace TicketHive.Client.Services
             await localStorage.SetItemAsync<List<CartItemModel>>("shoppingCartCookie", shoppingCart);
         }
 
+        public async Task IncreaseQuantity(CartItemModel item)
+        {
+            item.Quantity++;
+            await localStorage.SetItemAsync<List<CartItemModel>>("shoppingCartCookie", shoppingCart);
+        }
+
+        public async Task DecreaseQuantity(CartItemModel item)
+        {
+            if (item.Quantity > 1)
+            {
+                item.Quantity--;
+                await localStorage.SetItemAsync<List<CartItemModel>>("shoppingCartCookie", shoppingCart);
+            }
+            else
+            {
+                await RemoveFromCartAsync(item);
+            }
+        }
+
         // Ta bort från cart
         public async Task RemoveFromCartAsync(CartItemModel removeItem)
         {

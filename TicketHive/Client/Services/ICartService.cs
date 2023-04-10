@@ -15,5 +15,8 @@ namespace TicketHive.Client.Services
 
         // Remove from Cart
         Task RemoveFromCartAsync(CartItemModel removeItem);
+
+        Task IncreaseQuantity(CartItemModel item);
+        Task DecreaseQuantity(CartItemModel item);
     }
 }
