@@ -12,22 +12,37 @@ namespace TicketHive.Server.Repos.UsersRepo
             this.signInManager = signInManager;
         }
 
+        /// <summary>
+        /// Signs in a user with their username and password
+        /// </summary>
+        /// <param name="username">Username of the user to sign in</param>
+        /// <param name="password">Password of the user to sign in</param>
+        /// <param name="isPersistent">Whether or not the user's session should persist</param>
+        /// <param name="lockOutOnFailure">Whether or not to lock out the user after a certain number of failed attempts</param>
+        /// <returns>SignInResult of the sign in attempt</returns>
         public async Task<SignInResult> SignInUserWithUserName(string username, string password, bool isPersistent, bool lockOutOnFailure)
         {
             return await signInManager.PasswordSignInAsync(username, password, isPersistent, lockOutOnFailure);
         }
 
-        //OBS! Ta bort denna ifall den inte kommer användas
-        public async Task<SignInResult> SignInUser(ApplicationUser newUser, string password, bool isPersistent, bool lockOutOnFailure)
-        {
-            return await signInManager.PasswordSignInAsync(newUser, password, isPersistent, lockOutOnFailure);
-        }
-
+        /// <summary>
+        /// Registers a new user with the given details
+        /// </summary>
+        /// <param name="newUser">ApplicationUser instance with the details of the new user</param>
+        /// <param name="password">Password of the new user</param>
+        /// <returns>IdentityResult of the registration attempt</returns>
         public async Task<IdentityResult> RegisterNewUser(ApplicationUser newUser, string password)
         {
             return await signInManager.UserManager.CreateAsync(newUser, password);
         }
 
+        /// <summary>
+        /// Changes the password of the user with the given username
+        /// </summary>
+        /// <param name="username">Username of the user to change the password for</param>
+        /// <param name="currentPassword">Current password of the user</param>
+        /// <param name="newPassword">New password for the user</param>
+        /// <returns>IdentityResult of the password change attempt</returns>
         public async Task<IdentityResult> ChangePasswordAsync(string username, string currentPassword, string newPassword)
         {
             var user = await signInManager.UserManager.FindByNameAsync(username);
