@@ -8,6 +8,8 @@
 <h3>Account</h3>
 <h2>Change Password</h2>
 
+<AlertMessage IsVisible="@showAlert" Message="@alertMessage" Type="@alertType"/>
+
 <EditForm Model="changePassword" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator></DataAnnotationsValidator>
     <div class="form-group">
@@ -30,24 +32,43 @@
 
 @code {
     private ChangePasswordModel changePassword = new();
+    private bool showAlert = false;
+    private string alertMessage;
+    private string alertType;
 
     private async Task HandleValidSubmit()
     {
+        showAlert = true;
+
         var authState = await authStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
         var userName = user.Identity!.Name;
 
         if (userName != null)
         {            
-            var hasChangedPasswordSuccessfully = await identityService.ChangePasswordAsync(userName, changePassword.CurrentPassword, changePassword.NewPassword);
+            bool hasChangedPasswordSuccessfully = await identityService.ChangePasswordAsync(userName, changePassword.CurrentPassword, changePassword.NewPassword);
 
             if (hasChangedPasswordSuccessfully)
             {
-                //Visa meddelande att lösenordet är ändrat
+                //Clear input fields
+                changePassword = new();
+
+                alertMessage = "Password changed successfully!";
+                alertType = "success";
 
                 //behöver förmodligen lägga till detta i repo/controller/service
                 //await SignInManager.RefreshSignInAsync(user);
             }
+            else
+            {
+                alertMessage = "Failed to change the password";
+                alertType = "danger";
+            }
+        }
+        else
+        {
+            alertMessage = "Oh no! Something went wrong...";
+            alertType = "danger";
         }
     }
 }
