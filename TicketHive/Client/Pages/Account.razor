@@ -1,5 +1,6 @@
 ﻿@page "/account"
 @using Microsoft.AspNetCore.Authorization;
+@using System.ComponentModel.DataAnnotations;
 @attribute [Authorize]
 @inject IIdentityService identityService
 @inject AuthenticationStateProvider authStateProvider
@@ -7,31 +8,30 @@
 <h3>Account</h3>
 <h2>Change Password</h2>
 
-<form @onsubmit="HandleSubmit">
+<EditForm Model="changePassword" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
     <div class="form-group">
         <label for="currentPassword">Current Password</label>
-        <input type="password" class="form-control" id="currentPassword" @bind="@CurrentPassword" />
+        <InputText id="currentPassword" @bind-Value="changePassword.CurrentPassword" class="form-control" type="password"></InputText>
+        <ValidationMessage For="() => changePassword.CurrentPassword" />
     </div>
-
     <div class="form-group">
         <label for="newPassword">New Password</label>
-        <input type="password" class="form-control" id="newPassword" @bind="@NewPassword" />
+        <InputText id="newPassword" @bind-Value="changePassword.NewPassword" class="form-control" type="password"></InputText>
+        <ValidationMessage For="() => changePassword.NewPassword" />
     </div>
-
     <div class="form-group">
         <label for="confirmPassword">Confirm Password</label>
-        <input type="password" class="form-control" id="confirmPassword" @bind="@ConfirmPassword" />
+        <InputText id="confirmPassword" @bind-Value="changePassword.ConfirmPassword" class="form-control" type="password"></InputText>
+        <ValidationMessage For="() => changePassword.ConfirmPassword" />
     </div>
-
     <button type="submit" class="btn btn-primary">Change Password</button>
-</form>
+</EditForm>
 
 @code {
-    private string CurrentPassword { get; set; }
-    private string NewPassword { get; set; }
-    private string ConfirmPassword { get; set; }
+    private ChangePasswordModel changePassword = new();
 
-    private async Task HandleSubmit()
+    private async Task HandleValidSubmit()
     {
         var authState = await authStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
@@ -39,7 +39,7 @@
 
         if (userName != null)
         {            
-            var hasChangedPasswordSuccessfully = await identityService.ChangePasswordAsync(userName, CurrentPassword, NewPassword);
+            var hasChangedPasswordSuccessfully = await identityService.ChangePasswordAsync(userName, changePassword.CurrentPassword, changePassword.NewPassword);
 
             if (hasChangedPasswordSuccessfully)
             {
