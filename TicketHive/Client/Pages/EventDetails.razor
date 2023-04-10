@@ -20,12 +20,14 @@
                 string eventImage = $"/Images/{selectedEvent.Image}.png";
 
                 <h1>@selectedEvent.Name</h1>
-                <h2>Sold tickets: @selectedEvent.SoldTickets</h2>
+                <h2>@selectedEvent.EventType</h2>
                 <img src="@eventImage" />
                 <h3>Location: @selectedEvent.Location</h3>
                 <h4>Date: @selectedEvent.DateTime</h4>
+                <h4>Tickets available: @(@selectedEvent.MaxCapacity - @selectedEvent.SoldTickets) / @selectedEvent.MaxCapacity</h4>
 
                 // Om eventet redan ligger i varukorgen
+                // Här ska även läggas till att kolla om usern redan köpt biljett, då ska man inte heller kunna lägga till i varukorg
                 if (IsEventInCart())
                 {
                     <button disabled class="btn btn-primary">Event added in cart!</button>
