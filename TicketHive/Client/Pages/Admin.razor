@@ -8,30 +8,53 @@
 
 <h3>Admin</h3>
 
-<form @onsubmit="AddEvent">
-    <label for="name">Name:</label>
-    <input type="text" id="name" @bind="newEvent.Name" required>
+<EditForm Model="newEvent" OnValidSubmit="AddEvent">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
 
-    <label for="description">Description:</label>
-    <textarea id="description" @bind="newEvent.Description" required></textarea>
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <InputText id="name" @bind-Value="newEvent.Name" class="form-control"></InputText>
+        <ValidationMessage For="() => newEvent.Name" />
+    </div>
 
-    <label for="eventType">EventType:</label>
-    <input type="text" id="eventType" @bind="newEvent.EventType" required>
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <InputTextArea id="description" @bind-Value="newEvent.Description" class="form-control"></InputTextArea>
+        <ValidationMessage For="() => newEvent.Description" />
+    </div>
 
-    <label for="location">Location:</label>
-    <input type="text" id="location" @bind="newEvent.Location" required>
+    <div class="form-group">
+        <label for="eventType">Event Type:</label>
+        <InputText id="eventType" @bind-Value="newEvent.EventType" class="form-control"></InputText>
+        <ValidationMessage For="() => newEvent.EventType" />
+    </div>
 
-    <label for="date">Date:</label>
-    <input type="date" id="dateInput" @bind="newEvent.DateTime" />
+    <div class="form-group">
+        <label for="location">Location:</label>
+        <InputText id="location" @bind-Value="newEvent.Location" class="form-control"></InputText>
+        <ValidationMessage For="() => newEvent.Location" />
+    </div>
 
-    <label for="ticketPrice">Ticket price:</label>
-    <input type="number" id="ticketPrice" @bind="newEvent.TicketPrice" required>
+    <div class="form-group">
+        <label for="dateTime">Date and Time:</label>
+        <input type="datetime-local" id="dateTime" @bind-value="@newEvent.DateTime" class="form-control"></input>
+    </div>
 
-    <label for="maxAttendees">Max attendees:</label>
-    <input type="number" id="maxAttendees" @bind="newEvent.MaxCapacity" required>
+    <div class="form-group">
+        <label for="ticketPrice">Ticket Price:</label>
+        <InputNumber id="ticketPrice" @bind-Value="newEvent.TicketPrice" class="form-control"></InputNumber>
+        <ValidationMessage For="() => newEvent.TicketPrice" />
+    </div>
 
-    <button type="submit">Add Event</button>
-</form>
+    <div class="form-group">
+        <label for="maxAttendees">Max attendees:</label>
+        <InputNumber id="maxAttendees" @bind-Value="newEvent.MaxCapacity" class="form-control"></InputNumber>
+        <ValidationMessage For="() => newEvent.MaxCapacity" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Event</button>
+</EditForm>
+
 
 <select @bind="selectedItemId">
     <option value=""></option>
@@ -49,7 +72,7 @@
 @code {
     private List<EventModel> allEvents;
     private int selectedItemId;
-    private EventModel newEvent = new EventModel {DateTime = DateTime.Now};
+    private EventModel newEvent = new() { DateTime = DateTime.Now };
     private bool showAlert = false;
     private string alertMessage;
     private string alertType;
