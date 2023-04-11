@@ -9,6 +9,8 @@
 @inject ILocalStorageService localStorage
 @inject ICartService cartService
 
+<AlertMessage IsVisible="@showAlert" Message="@alertMessage" Type="@alertType" />
+
 <button class="btn btn-primary" @onclick="(() => GoBack())">BACK</button>
 
 @if (shoppingCart != null)
@@ -36,9 +38,9 @@
                         </td>
                         <td>@item.Event.TicketPrice</td>
                         <td>
-                            <button class="btn btn-primary" @onclick="(() => cartService.IncreaseQuantity(item))">+</button>
-                        @item.Quantity
                             <button class="btn btn-primary" @onclick="(() => cartService.DecreaseQuantity(item))">-</button>
+                        @item.Quantity
+                            <button class="btn btn-primary" @onclick="(() => cartService.IncreaseQuantity(item))">+</button>
                         </td>
                     <td>@(item.Event.TicketPrice * item.Quantity)</td>
                     </tr>
@@ -66,6 +68,9 @@ else
 
 @code {
     private List<CartItemModel>? shoppingCart;
+    private bool showAlert = false;
+    private string alertMessage;
+    private string alertType;
 
     // Behöver ha inloggarens identity för att lägga till i databasen?
     private string loggedInUserUsername;
@@ -87,24 +92,35 @@ else
 
     private async Task ValidatePurchase(List<CartItemModel> shoppingCart)
     {
+        bool allItemsValidated = true;
         // Här ska alla kontroller göras innan användaren avslutar sitt köp
         foreach (var item in shoppingCart)
         {
             if (item.Event.MaxCapacity - item.Event.SoldTickets < item.Quantity)
             {
                 //Finns inte tillräckligt med tickets = felmeddelande
-                break;
+                allItemsValidated = false;
+                showAlert = true;
+                alertMessage = "Not enough tickets for " + item.Event.Name + "!" + "\nYou tried to buy " + item.Quantity + " tickets but there is only " + (item.Event.MaxCapacity - item.Event.SoldTickets) + " left!";
+                alertType = "danger";
             }
         }
-
-        // Kontrollen gick bra och nu läggs eventet till hos användaren
-        foreach (var item in shoppingCart)
+        if (allItemsValidated)
         {
-            item.Event.SoldTickets += item.Quantity;
-            await eventsService.UpdateEventAsync(item.Event);
-            //await AddEventToUser(item.Event.Id);
+            // Kontrollen gick bra och nu läggs eventet till hos användaren
+            foreach (var item in shoppingCart)
+            {
+                item.Event.SoldTickets += item.Quantity;
+                if (item.Event.SoldTickets == item.Event.MaxCapacity)
+                {
+                    // så äre kört
+                    item.Event.IsFullyBooked = true;
+                }
+                await eventsService.UpdateEventAsync(item.Event);
+                await AddEventToUser(item.Event.Id);
+            }
+            navigationManager.NavigateTo($"/confirmation");
         }
-        navigationManager.NavigateTo($"/confirmation");
     }
 
     private async Task AddEventToUser(int id)

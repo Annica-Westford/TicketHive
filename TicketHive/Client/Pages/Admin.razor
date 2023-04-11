@@ -1,40 +1,84 @@
 ﻿@page "/admin"
 @using Microsoft.AspNetCore.Authorization;
 @attribute [Authorize(Roles = "Admin")]
+@inject IEventsService eventsService
+@inject IJSRuntime jsRuntime
+
+<AlertMessage IsVisible="@showAlert" Message="@alertMessage" Type="@alertType" />
 
 <h3>Admin</h3>
 
-<p>Här ska det finnas textfält för att skapa ett nytt evenemang.</p>
-<p>Name: </p>
-<p>Description: </p>
-<p>EventType: </p>
-<p>Location: </p>
-<p>Date: </p>
-<p>Ticket price: </p>
-<p>Max attendees: </p>
+<form @onsubmit="AddEvent">
+    <label for="name">Name:</label>
+    <input type="text" id="name" @bind="newEvent.Name" required>
 
-<button>Lägg till nytt evenemang</button>
+    <label for="description">Description:</label>
+    <textarea id="description" @bind="newEvent.Description" required></textarea>
 
-<label for="deleteEvent">Delete event:</label>
-<select id="deleteEvent" @onchange="DeleteEvent">
+    <label for="eventType">EventType:</label>
+    <input type="text" id="eventType" @bind="newEvent.EventType" required>
+
+    <label for="location">Location:</label>
+    <input type="text" id="location" @bind="newEvent.Location" required>
+
+    <label for="date">Date:</label>
+    <input type="date" id="dateInput" @bind="newEvent.DateTime" />
+
+    <label for="ticketPrice">Ticket price:</label>
+    <input type="number" id="ticketPrice" @bind="newEvent.TicketPrice" required>
+
+    <label for="maxAttendees">Max attendees:</label>
+    <input type="number" id="maxAttendees" @bind="newEvent.MaxCapacity" required>
+
+    <button type="submit">Add Event</button>
+</form>
+
+<select @bind="selectedItemId">
     <option value=""></option>
-    <option value="">Event 1</option>
-    <option value="">Event 2</option>
-    <option value="">Event 3</option>
-    <option value="">Event 4</option>
-    <option value="">Event 5</option>
-    <option value="">Event 6</option>
+    @if (allEvents != null)
+    {
+        foreach (var item in allEvents)
+        {
+            <option value="@item.Id">@item.Name</option>
+        }
+    }
 </select>
 
+<button @onclick="() => DeleteEvent(selectedItemId)">Delete Event</button>
 
 @code {
-    private void FillEventMenu()
+    private List<EventModel> allEvents;
+    private int selectedItemId;
+    private EventModel newEvent = new EventModel {DateTime = DateTime.Now};
+    private bool showAlert = false;
+    private string alertMessage;
+    private string alertType;
+
+    protected override async Task OnInitializedAsync()
     {
-        // Här ska en foreach lägga in alla events i databasen i dropdown menyn.
+        allEvents = await eventsService.GetAllEventsAsync();
     }
 
-    private void DeleteEvent(ChangeEventArgs e)
+    private async Task AddEvent()
     {
-        // Här ska knappen ta bort det event man har valt
+        showAlert = true;
+        alertMessage = newEvent.Name + " has been successfully added to the events!";
+        alertType = "success";
+        await eventsService.AddEventAsync(newEvent);
+        allEvents.Add(newEvent);
+    }
+
+    private async Task DeleteEvent(int id)
+    {
+        if (allEvents != null && await jsRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this event?"))
+        {
+            showAlert = true;
+            alertMessage =  "Event has been removed from the database!";
+            alertType = "danger";
+            await eventsService.DeleteEventAsync(id);
+            allEvents.RemoveAll(item => item.Id == id);
+        }
+
+        
     }
 }
