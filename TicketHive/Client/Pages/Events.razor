@@ -78,7 +78,11 @@
 
         if (searchWord != null)
         {
-            filteredEvents = allEvents.Where(fisk => fisk.Name!.ToLower().Contains(searchWord.ToLower())).ToList();
+            filteredEvents = allEvents.Where(fisk =>
+                fisk.Name!.ToLower().Contains(searchWord.ToLower())
+                || fisk.Location!.ToLower().Contains(searchWord.ToLower())
+                || fisk.EventType!.ToLower().Contains(searchWord.ToLower())
+            ).ToList();
         }
 
     }
@@ -90,7 +94,11 @@
 
     private void FilterEvents(ChangeEventArgs e)
     {
-        filteredEvents = allEvents.Where(fisk => fisk.Name!.ToLower().Contains(e.Value.ToString().ToLower())).ToList();
+        filteredEvents = allEvents.Where(fisk =>
+            fisk.Name!.ToLower().Contains(e.Value.ToString().ToLower())
+            || fisk.Location!.ToLower().Contains(e.Value.ToString().ToLower())
+            || fisk.EventType!.ToLower().Contains(e.Value.ToString().ToLower())
+        ).ToList();
     }
 
     private void SortEvents(ChangeEventArgs e)
