@@ -14,7 +14,7 @@
     <button id="searchbtn" class="btn btn-primary" @onclick="@(() => SearchForEvent())">Search</button>
     <button id="eventbtn" class="btn btn-primary" @onclick="(() => ShowAllEvents())">Show all events</button>
 </div>
-@if (eventsBought != null)
+@if (eventsBought != null && eventsBought.Count > 0)
 {
     <p class="attending">You are already attending: 
 
