@@ -5,11 +5,21 @@
 @inject IIdentityService identityService
 @inject AuthenticationStateProvider authStateProvider
 
-<h3>Account</h3>
-<h2>Change Password</h2>
-
 <AlertMessage IsVisible="@showAlert" Message="@alertMessage" Type="@alertType"/>
 
+<div class="fullscreen">
+    <video loop muted autoplay>
+        <source src="/video2.mp4" type="video/mp4">
+    </video>
+</div>
+
+<div class="back">
+
+
+    <div class="div-center">
+
+
+        <div class="content">
 <EditForm Model="changePassword" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator></DataAnnotationsValidator>
     <div class="form-group">
@@ -29,6 +39,9 @@
     </div>
     <button type="submit" class="btn btn-primary">Change Password</button>
 </EditForm>
+</div>
+</div>
+</div>
 
 @code {
     private ChangePasswordModel changePassword = new();
