@@ -38,11 +38,12 @@
     <div class="form-group">
         <label for="dateTime">Date and Time:</label>
         <input type="datetime-local" id="dateTime" @bind-value="@newEvent.DateTime" class="form-control"
-               min="@DateTime.Today.ToString("yyyy-MM-ddTHH:mm")" oninput="@(() => ValidateDate(newEvent.DateTime))"></input>
+               min="@DateTime.Today.ToString("yyyy-MM-ddTHH:mm")"></input>
     </div>
+    @*detta displayas inte men jag vet inte varför*@
     @if (!isDateValid)
     {
-        <div class="text-danger">You can't select a date before today's date</div>
+        <div class="text-danger">You can't select a date before today's date</div> 
     }
 
     <div class="form-group">
@@ -78,7 +79,6 @@
     private List<EventModel> allEvents;
     private int selectedItemId;
     private EventModel newEvent = new() { DateTime = DateTime.Now };
-    private DateTime today = DateTime.Today;
     private bool isDateValid = true;
     private bool showAlert = false;
     private string alertMessage;
@@ -90,29 +90,26 @@
 
     }
 
-    private void ValidateDate(DateTime date)
+    private async Task AddEvent()
     {
-        if (date < today)
+        if (newEvent.DateTime < DateTime.Now)
         {
             isDateValid = false;
         }
         else
         {
             isDateValid = true;
+
+            showAlert = true;
+            alertMessage = newEvent.Name + " has been successfully added to the events!";
+            alertType = "success";
+
+            //Add random image to event
+            newEvent.Image = $"image-{new Random().Next(1, 27)}";
+
+            await eventsService.AddEventAsync(newEvent);
+            allEvents.Add(newEvent);
         }
-    }
-
-    private async Task AddEvent()
-    {
-        showAlert = true;
-        alertMessage = newEvent.Name + " has been successfully added to the events!";
-        alertType = "success";
-
-        //Add random image to event
-        newEvent.Image = $"image-{new Random().Next(1, 27)}";
-
-        await eventsService.AddEventAsync(newEvent);
-        allEvents.Add(newEvent);
 
     }
 
