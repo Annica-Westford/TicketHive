@@ -3,8 +3,6 @@
 @{
 }
 
-<h1>Register</h1>
-
 @if (!string.IsNullOrEmpty(Model.Message))
 {
     <script>
@@ -13,6 +11,19 @@
     </script>
 }
 
+<div class="fullscreen">
+    <video loop muted autoplay>
+        <source src="/video2.mp4" type="video/mp4">
+    </video>
+</div>
+
+<div class="back">
+
+
+    <div class="div-center">
+
+
+        <div class="content">
 <form method="post">
     <label for="username-input">Username:</label>
     <input id="username-input" type="text" asp-for="Username" placeholder="Username" />
@@ -24,9 +35,125 @@
     <input id="verify-password-input" type="password" asp-for="VerifiedPassword" placeholder="Password" />
     <br />
     <input type="submit" value="Register" />
+                <div id="center">
+                    <a href="/authentication/login">Log In</a>
+                </div>
     <div>
         <span class="text-danger" asp-validation-for="Username"></span>
         <span class="text-danger" asp-validation-for="Password"></span>
         <span class="text-danger" asp-validation-for="VerifiedPassword"></span>
     </div>
 </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    form {
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 5px;
+    }
+
+    #center {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #305076;
+    }
+
+
+    .fullscreen video {
+        object-fit: cover;
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: -1;
+    }
+
+    .fullscreen .background {
+        background-color: #fbe89c;
+        object-fit: cover;
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: -1;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: none;
+        border-radius: 3px;
+    }
+
+    input[type="submit"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        background-color: #305076;
+        color: #fbe89c;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        input[type="submit"]:hover {
+            background-color: black;
+        }
+
+    .text-danger {
+        color: red;
+        font-size: 12px;
+    }
+
+
+    .back {
+        width: 100%;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+    }
+
+    .div-center {
+        width: 400px;
+        height: 400px;
+        background-color: rgba(251, 232, 156, 0.9);
+        position: absolute;
+        z-index: 10;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        max-width: 100%;
+        max-height: 100%;
+        overflow: auto;
+        padding: 1em 2em;
+        border-bottom: 2px solid #ccc;
+        display: table;
+        border-radius: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    div.content {
+        display: table-cell;
+        vertical-align: middle;
+    }
+</style>

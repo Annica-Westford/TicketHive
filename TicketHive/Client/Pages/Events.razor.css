@@ -67,7 +67,7 @@
     margin-bottom:3rem;
 }
 
-.fullscreen video {
+.fullscreen img {
     object-fit: cover;
     width: 100vw;
     height: 100vh;
