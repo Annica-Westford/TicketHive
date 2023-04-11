@@ -65,18 +65,13 @@
         List<EventModel> sortedPopularEvents = allEvents.OrderByDescending(s => s.SoldTickets).ToList();
         popularEvents = sortedPopularEvents.Take(3).ToList();
 
+        // Laddar cookies
+        await cartService.LoadCookies();
+
         // Hämtar alla events som användaren har biljetter till
         var authState = await provider.GetAuthenticationStateAsync();
         var name = authState.User.Identity.Name;
         eventsBought = await eventsService.GetAllEventsFromUserAsync(name);
-
-        // Clearar gamla cookies och tickets tillagda om vi vill
-        //await ClearCookies();
-    }
-
-    private async Task ClearCookies()
-    {
-        await localStorage.ClearAsync();
     }
 
     void ShowEvent(int id)

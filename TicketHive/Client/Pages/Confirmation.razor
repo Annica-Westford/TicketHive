@@ -1,9 +1,96 @@
 ﻿@page "/confirmation"
 @using Microsoft.AspNetCore.Authorization;
 @attribute [Authorize]
+@inject NavigationManager navigationManager
+@inject IEventsService eventsService
+@inject ILocalStorageService localStorage
+@inject ICartService cartService
 
-<h3>Confirmation</h3>
+<h1 class="title">Thank you for your purchase!</h1>
+
+<p class="message">Your order has been successfully processed.</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in boughtEvents)
+        {
+            <tr>
+                <td>@item.Event.Name</td>
+                <td>@item.Event.TicketPrice</td>
+                <td>@item.Quantity</td>
+                <td>@(item.Event.TicketPrice * item.Quantity)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3 class="total">Total: @boughtEvents.Sum(item => item.Event.TicketPrice * item.Quantity)</h3>
+
+<button class="btn btn-primary" @onclick="(() => GoToHome())">Continue</button>
+
+<style>
+    .title {
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .message {
+        font-size: 24px;
+        margin-bottom: 30px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
+
+        .table th {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+    .total {
+        font-size: 24px;
+        font-weight: bold;
+    }
+</style>
 
 @code {
+    private List<CartItemModel>? boughtEvents;
 
+    protected override async Task OnInitializedAsync()
+    {
+        // Hämtar alla items i shoppingcart
+        boughtEvents = cartService.GetShoppingCartItems();
+
+
+        // Clearar cookies
+        await ClearCookies();
+    }
+
+    private async Task ClearCookies()
+    {
+        await localStorage.ClearAsync();
+    }
+
+    private void GoToHome()
+    {
+        navigationManager.NavigateTo($"/home");
+    }
 }

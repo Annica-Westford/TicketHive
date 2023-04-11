@@ -56,12 +56,12 @@
     }
     else
     {
-        <p>Your cart is empty dawg.</p>
+        <p>You have emptied your cart dawg.</p>
     }
 }
 else
 {
-    <p>Your cart is empty dawg.</p>
+    <p>You seem new here... Go add some events!</p>
 }
 
 @code {
@@ -88,14 +88,27 @@ else
     private async Task ValidatePurchase(List<CartItemModel> shoppingCart)
     {
         // Här ska alla kontroller göras innan användaren avslutar sitt köp
+        foreach (var item in shoppingCart)
+        {
+            if (item.Event.MaxCapacity - item.Event.SoldTickets < item.Quantity)
+            {
+                //Finns inte tillräckligt med tickets = felmeddelande
+                break;
+            }
+        }
+
+        // Kontrollen gick bra och nu läggs eventet till hos användaren
+        foreach (var item in shoppingCart)
+        {
+            item.Event.SoldTickets += item.Quantity;
+            await eventsService.UpdateEventAsync(item.Event);
+            //await AddEventToUser(item.Event.Id);
+        }
+        navigationManager.NavigateTo($"/confirmation");
     }
 
-
-    // När man trycker på köpknappen. Avaktiverad så att vi inte gör kaos i databasen
     private async Task AddEventToUser(int id)
     {
-
-        //await eventsService.AddEventToUserAsync(loggedInUserUsername, id);
-        //shoppingCart.Clear();
+        await eventsService.AddEventToUserAsync(loggedInUserUsername, id);
     }
 }
