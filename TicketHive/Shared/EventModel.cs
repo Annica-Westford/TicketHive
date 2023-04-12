@@ -18,12 +18,11 @@ namespace TicketHive.Shared
         public string Location { get; set; } = null!;
         public string? Image { get; set; }
 
-        [Required(ErrorMessage = "Date and time is required")]
-        [Compare(nameof(DateTime.Now), ErrorMessage = "Date and time must be after today's date")]
+        //[Required(ErrorMessage = "Date and time is required")]
         public DateTime DateTime { get; set; }
 
         [Required(ErrorMessage = "TicketPrice is required")]
-        [Range(typeof(decimal), "0.01", "79228162514264337593543950335", ErrorMessage = "TicketPrice must be a positive number")]
+        [Range(0, double.MaxValue, ErrorMessage = "TicketPrice must be a positive number")]
         public decimal TicketPrice { get; set; }
 
         [Required(ErrorMessage = "Max attendees is required")]
