@@ -39,7 +39,7 @@
 
             <form @onsubmit="UpdateCountry">
                 <div class="form-group">
-                    <label for="country-select">Select New Country:</label>
+                    <label for="country-select">Select Country:</label>
                     <select class="form-control" id="country-select" @bind="@selectedCountry">
                         <option value="">--Select a country--</option>
                         @foreach (var country in Enum.GetValues(typeof(Countries)))
@@ -75,9 +75,6 @@
         userName = user.Identity!.Name;
 
         selectedCountry = await identityService.GetUserCountryAsync(userName);
-
-        //bool hasChangedCountrySuccessfully = await identityService.UpdateUserCountryAsync(userName, "Bulgaria");
-
     }
 
     private async Task HandleValidSubmit()
@@ -93,7 +90,7 @@
                 //Clear input fields
                 changePassword = new();
 
-                alertMessage = "Password changed successfully!";
+                alertMessage = "Password updated!";
                 alertType = "success";
 
                 //behöver förmodligen lägga till detta i repo/controller/service
@@ -101,7 +98,7 @@
             }
             else
             {
-                alertMessage = "Failed to change the password";
+                alertMessage = "Failed to update the password";
                 alertType = "danger";
             }
         }
@@ -112,10 +109,22 @@
         }
     }
 
-    private void UpdateCountry()
+    private async Task UpdateCountry()
     {
-        //kalla på metoden för att uppdatera land
-        //om allt gick bra visa alert message att det gick bra
-        //om något gick fel visa alert message att något blev fel
+        showAlert = true;
+
+        bool hasChangedCountrySuccessfully = await identityService.UpdateUserCountryAsync(userName, selectedCountry);
+
+        if (hasChangedCountrySuccessfully)
+        {
+            alertMessage = "Country saved!";
+            alertType = "success";
+        }
+        else
+        {
+            alertMessage = "Failed to update the country";
+            alertType = "danger";
+        }
+
     }
 }
