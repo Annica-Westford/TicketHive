@@ -43,6 +43,14 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
         {
         }
 
+        /// <summary>
+        /// Handles the HTTP POST request for registering a new user
+        /// </summary>
+        /// <returns>A Task of IActionResult that represents the result of the action. If the
+        /// user registation is successful the action redirects the user to the login page. If it
+        /// fails or the model state is invalid, the action returns the current page and displays 
+        /// the validation errors
+        /// </returns>
         public async Task<IActionResult> OnPost()
         {
             //Om alla properties är bindade som de ska
@@ -66,19 +74,8 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
                         Username = newUser.UserName
                     };
 
-                    //lägg till den i TicketHive-databasen
                     await eventsRepo.AddUserAsync(newTicketHiveUser);
 
-                    //Testa att logga in användaren med lösenordet
-                    //var signInResult = await signInManager.PasswordSignInAsync(newUser, Password!, false, false);
-                    ////Om inloggningsförsöket lyckades
-                    //if (signInResult.Succeeded)
-                    //{
-                    //    //Detta dirigerar användaren till startsidan, som ju är en Blazor component
-                    //    return Redirect("~/");
-                    //}
-
-                    //Skicka personen till Login-sidan
                     return Redirect("/Authentication/Login");
                 }
                 else
@@ -87,7 +84,6 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
                 }
             }
 
-            //Rendera om sidan om modellerna inte var bindade korrekt
             return Page();
         }
     }
