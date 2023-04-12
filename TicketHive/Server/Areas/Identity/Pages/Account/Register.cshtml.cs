@@ -7,6 +7,7 @@ using TicketHive.Server.Models;
 using TicketHive.Server.Repos.EventsRepo;
 using TicketHive.Server.Repos.UsersRepo;
 using TicketHive.Shared;
+using TicketHive.Shared.Enums;
 
 namespace TicketHive.Server.Areas.Identity.Pages.Account
 {
@@ -34,8 +35,8 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
 
         [BindProperty]
         [Required]
-        [FromForm(Name = "Country")]
-        public string Country { get; set; }
+        //[FromForm(Name = "Country")]
+        public string CountryInput { get; set; }
 
         public string Message { get; set; } = string.Empty;
 
@@ -64,7 +65,8 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
                 //Skapa en ny ApplicationUser med användarnamnet som är inskrivet
                 ApplicationUser newUser = new()
                 {
-                    UserName = Username
+                    UserName = Username,
+                    Country = CountryInput
                 };
 
                 //Testa att registrera användaren med lösenordet den skrev in 

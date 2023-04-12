@@ -32,23 +32,24 @@
                 <input id="verify-password-input" type="password" asp-for="VerifiedPassword" placeholder="Password" />
                 <br />
                 <label for="country-select">Select country:</label>
-                <select id="country-select" asp-for="Country">
+                <select id="country-select" asp-for="CountryInput">
                     <option value="">--Select a country--</option>
                     @foreach (var country in Enum.GetValues(typeof(Countries)))
                     {
-                        <option value="@country">@country</option>
+                        <option value="@country.ToString()">@country</option>
                     }
                 </select>
-                @*<input id="country-input" type="text" asp-for="Country" placeholder="Country" />*@
                 <br />
-                <input type="submit" value="Register" />
-                <div id="center">
-                    <a href="/authentication/login">Log In</a>
-                </div>
                 <div>
                     <span class="text-danger" asp-validation-for="Username"></span>
                     <span class="text-danger" asp-validation-for="Password"></span>
                     <span class="text-danger" asp-validation-for="VerifiedPassword"></span>
+                    @*Detta visas inte och jag vet inte varför*@
+                    <span class="text-danger" asp-validation-for="CountryInput"></span>
+                </div>
+                <input type="submit" value="Register" />
+                <div id="center">
+                    <a href="/authentication/login">Log In</a>
                 </div>
             </form>
         </div>
