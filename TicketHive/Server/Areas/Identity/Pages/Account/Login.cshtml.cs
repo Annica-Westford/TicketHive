@@ -8,7 +8,6 @@ using TicketHive.Server.Repos.UsersRepo;
 
 namespace TicketHive.Server.Areas.Identity.Pages.Account
 {
-    
     public class LoginModel : PageModel
     {
         private readonly IUsersRepo repo;
@@ -31,16 +30,22 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
         {
         }
 
+        /// <summary>
+        /// Handles the HTTP POST request for logging in a user with a username and password.
+        /// </summary>
+        /// <returns>
+        /// A task of IAcionResult that represents the result of the action. If the user login
+        /// is successful, the action redirects the user to the home page. If the login fails or the
+        /// model state is invalid, the action returns the current page with any validation errors displayed.
+        /// </returns>
         public async Task<IActionResult> OnPost()
         {
-
             if (ModelState.IsValid)
             {
                 var signInResult = await repo.SignInUserWithUserName(Username!, Password!, false, false);
 
                 if (signInResult.Succeeded)
                 {
-                    //lägg in länk till vart man ska skickas när man loggat in!
                     return Redirect("~/home");
                 }
                 else
