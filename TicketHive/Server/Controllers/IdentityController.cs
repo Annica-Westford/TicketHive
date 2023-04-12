@@ -36,6 +36,12 @@ namespace TicketHive.Server.Controllers
             return BadRequest();
         }
 
+        /// <summary>
+        /// Updates the country of the user with the given username to the specified new country.
+        /// </summary>
+        /// <param name="username">The username of the user to update.</param>
+        /// <param name="newCountry">The new country to set for the user.</param>
+        /// <returns>AnIActionResult representing the result of the update operation.</returns>
         [HttpPut("{username}/{newCountry}")]
         public async Task<IActionResult> UpdateUserCountryAsync(string username, string newCountry)
         {
@@ -49,8 +55,13 @@ namespace TicketHive.Server.Controllers
             return NotFound();
         }
 
+        /// <summary>
+        /// Retrieves the country of the user with the given username.
+        /// </summary>
+        /// <param name="username">The username of the user to retrieve the country for.</param>
+        /// <returns>An ActionResult of string representing the result of the operation.</returns>
         [HttpGet("{username}")]
-        public async Task<ActionResult<string?>> GetEventByIdAsync(string username)
+        public async Task<ActionResult<string?>> GetCountryByIdAsync(string username)
         {
             string? userCountry = await repo.GetUserCountryAsync(username);
 
