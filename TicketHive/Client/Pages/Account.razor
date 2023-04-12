@@ -49,6 +49,16 @@
     private string alertMessage;
     private string alertType;
 
+    protected override async Task OnInitializedAsync()
+    {
+        //var authState = await authStateProvider.GetAuthenticationStateAsync();
+        //var user = authState.User;
+        //var userName = user.Identity!.Name;
+
+        //bool hasChangedCountrySuccessfully = await identityService.UpdateUserCountryAsync(userName, "Bulgaria");
+
+    }
+
     private async Task HandleValidSubmit()
     {
         showAlert = true;

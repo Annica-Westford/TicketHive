@@ -34,5 +34,18 @@ namespace TicketHive.Server.Controllers
 
             return BadRequest();
         }
+
+        [HttpPut("{username}/{newCountry}")]
+        public async Task<IActionResult> UpdateUserCountryAsync(string username, string newCountry)
+        {
+            bool hasUpdatedCountrySuccesfully = await repo.UpdateUserCountryAsync(username, newCountry);
+
+            if (hasUpdatedCountrySuccesfully)
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
     }
 }

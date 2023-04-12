@@ -19,5 +19,17 @@
 
             return false;
         }
+
+        public async Task<bool> UpdateUserCountryAsync(string username, string newCountry)
+        {
+            var result = await httpClient.PutAsync($"api/identity/{username}/{newCountry}", null);
+
+            if (result.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

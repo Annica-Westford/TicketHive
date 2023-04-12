@@ -54,5 +54,28 @@ namespace TicketHive.Server.Repos.UsersRepo
 
             return IdentityResult.Failed(new IdentityError { Description = "User not found." });
         }
+
+        public async Task<bool> UpdateUserCountryAsync(string username, string newCountry)
+        {
+            var user = await signInManager.UserManager.FindByNameAsync(username);
+
+            if (user != null)
+            {
+                user.Country = newCountry;
+
+                var result = await signInManager.UserManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    //refresh the user's authentication cookie with the updated user information
+                    await signInManager.RefreshSignInAsync(user);
+                    return true;
+                }
+
+                return false;
+            }
+
+            return false;
+        }
     }
 }
