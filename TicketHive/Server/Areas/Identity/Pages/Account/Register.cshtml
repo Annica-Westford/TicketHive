@@ -1,4 +1,5 @@
 ﻿@page
+@using TicketHive.Shared.Enums;
 @model TicketHive.Server.Areas.Identity.Pages.Account.RegisterModel
 @{
 }
@@ -18,32 +19,38 @@
 </div>
 
 <div class="back">
-
-
     <div class="div-center">
-
-
         <div class="content">
-<form method="post">
-    <label for="username-input">Username:</label>
-    <input id="username-input" type="text" asp-for="Username" placeholder="Username" />
-    <br />
-    <label for="password-input">Password:</label>
-    <input id="password-input" type="password" asp-for="Password" placeholder="Password" />
-    <br />
-    <label for="verify-password-input">Verify Password:</label>
-    <input id="verify-password-input" type="password" asp-for="VerifiedPassword" placeholder="Password" />
-    <br />
-    <input type="submit" value="Register" />
+            <form method="post">
+                <label for="username-input">Username:</label>
+                <input id="username-input" type="text" asp-for="Username" placeholder="Username" />
+                <br />
+                <label for="password-input">Password:</label>
+                <input id="password-input" type="password" asp-for="Password" placeholder="Password" />
+                <br />
+                <label for="verify-password-input">Verify Password:</label>
+                <input id="verify-password-input" type="password" asp-for="VerifiedPassword" placeholder="Password" />
+                <br />
+                <label for="country-select">Select country:</label>
+                <select id="country-select" asp-for="Country">
+                    <option value="">--Select a country--</option>
+                    @foreach (var country in Enum.GetValues(typeof(Countries)))
+                    {
+                        <option value="@country">@country</option>
+                    }
+                </select>
+                @*<input id="country-input" type="text" asp-for="Country" placeholder="Country" />*@
+                <br />
+                <input type="submit" value="Register" />
                 <div id="center">
                     <a href="/authentication/login">Log In</a>
                 </div>
-    <div>
-        <span class="text-danger" asp-validation-for="Username"></span>
-        <span class="text-danger" asp-validation-for="Password"></span>
-        <span class="text-danger" asp-validation-for="VerifiedPassword"></span>
-    </div>
-</form>
+                <div>
+                    <span class="text-danger" asp-validation-for="Username"></span>
+                    <span class="text-danger" asp-validation-for="Password"></span>
+                    <span class="text-danger" asp-validation-for="VerifiedPassword"></span>
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -32,6 +32,11 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
         [Compare(nameof(Password), ErrorMessage = "Passwords don't match!")]
         public string VerifiedPassword { get; set; }
 
+        [BindProperty]
+        [Required]
+        [FromForm(Name = "Country")]
+        public string Country { get; set; }
+
         public string Message { get; set; } = string.Empty;
 
         public RegisterModel(IUsersRepo usersRepo, IEventsRepo eventsRepo)
