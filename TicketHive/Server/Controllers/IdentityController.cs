@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketHive.Server.Repos.UsersRepo;
+using TicketHive.Shared;
 
 namespace TicketHive.Server.Controllers
 {
@@ -43,6 +44,19 @@ namespace TicketHive.Server.Controllers
             if (hasUpdatedCountrySuccesfully)
             {
                 return Ok();
+            }
+
+            return NotFound();
+        }
+
+        [HttpGet("{username}")]
+        public async Task<ActionResult<string?>> GetEventByIdAsync(string username)
+        {
+            string? userCountry = await repo.GetUserCountryAsync(username);
+
+            if (userCountry != null)
+            {
+                return Ok(userCountry);
             }
 
             return NotFound();

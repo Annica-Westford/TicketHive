@@ -31,8 +31,8 @@
                 <label for="verify-password-input">Verify Password:</label>
                 <input id="verify-password-input" type="password" asp-for="VerifiedPassword" placeholder="Password" />
                 <br />
-                <label for="country-select">Select country:</label>
-                <select id="country-select" asp-for="CountryInput">
+                <label for="country-select">Select Country:</label>
+                <select id="country-select" asp-for="SelectedCountry">
                     <option value="">--Select a country--</option>
                     @foreach (var country in Enum.GetValues(typeof(Countries)))
                     {
@@ -45,7 +45,7 @@
                     <span class="text-danger" asp-validation-for="Password"></span>
                     <span class="text-danger" asp-validation-for="VerifiedPassword"></span>
                     @*Detta visas inte och jag vet inte varför*@
-                    <span class="text-danger" asp-validation-for="CountryInput"></span>
+                    <span class="text-danger" asp-validation-for="SelectedCountry"></span>
                 </div>
                 <input type="submit" value="Register" />
                 <div id="center">

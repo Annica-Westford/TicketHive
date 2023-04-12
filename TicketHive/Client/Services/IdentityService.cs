@@ -1,4 +1,7 @@
-﻿namespace TicketHive.Client.Services
+﻿using System.Net.Http.Json;
+using TicketHive.Shared;
+
+namespace TicketHive.Client.Services
 {
     public class IdentityService : IIdentityService
     {
@@ -30,6 +33,18 @@
             }
 
             return false;
+        }
+
+        public async Task<string?> GetUserCountryAsync(string username)
+        {
+            var result = await httpClient.GetStringAsync($"/api/identity/{username}");
+
+            if (!string.IsNullOrEmpty(result))
+            {
+                return result;
+            }
+
+            return null;
         }
     }
 }

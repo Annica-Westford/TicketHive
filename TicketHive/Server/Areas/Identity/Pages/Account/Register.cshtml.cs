@@ -36,7 +36,7 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
         [BindProperty]
         [Required]
         //[FromForm(Name = "Country")]
-        public string CountryInput { get; set; }
+        public string SelectedCountry { get; set; }
 
         public string Message { get; set; } = string.Empty;
 
@@ -66,7 +66,7 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
                 ApplicationUser newUser = new()
                 {
                     UserName = Username,
-                    Country = CountryInput
+                    Country = SelectedCountry
                 };
 
                 //Testa att registrera användaren med lösenordet den skrev in 
