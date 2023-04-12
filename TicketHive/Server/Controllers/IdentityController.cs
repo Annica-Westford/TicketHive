@@ -41,7 +41,7 @@ namespace TicketHive.Server.Controllers
         /// </summary>
         /// <param name="username">The username of the user to update.</param>
         /// <param name="newCountry">The new country to set for the user.</param>
-        /// <returns>AnIActionResult representing the result of the update operation.</returns>
+        /// <returns>An IActionResult representing the result of the update operation.</returns>
         [HttpPut("{username}/{newCountry}")]
         public async Task<IActionResult> UpdateUserCountryAsync(string username, string newCountry)
         {
