@@ -113,18 +113,32 @@ else
                 item.Event.SoldTickets += item.Quantity;
                 if (item.Event.SoldTickets == item.Event.MaxCapacity)
                 {
-                    // så äre kört
                     item.Event.IsFullyBooked = true;
                 }
-                await eventsService.UpdateEventAsync(item.Event);
-                await AddEventToUser(item.Event.Id);
+
+                EventModel? updatedEvent = await eventsService.UpdateEventAsync(item.Event);
+
+                if (updatedEvent != null)
+                {
+                    bool isSuccessfullyAddedToUser = await AddEventToUser(item.Event.Id);
+                    if (isSuccessfullyAddedToUser)
+                    {
+                        navigationManager.NavigateTo($"/confirmation");
+                    }
+                }
+                else
+                {
+                    showAlert = true;
+                    alertMessage = "Something went wrong...";
+                    alertType = "danger";
+                }
             }
-            navigationManager.NavigateTo($"/confirmation");
+            
         }
     }
 
-    private async Task AddEventToUser(int id)
+    private async Task<bool> AddEventToUser(int id)
     {
-        await eventsService.AddEventToUserAsync(loggedInUserUsername, id);
+        return await eventsService.AddEventToUserAsync(loggedInUserUsername, id);
     }
 }
