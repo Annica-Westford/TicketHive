@@ -1,12 +1,15 @@
 ﻿@page "/home"
 @using Microsoft.AspNetCore.Authorization;
+@using TicketHive.Client.Api;
 @using TicketHive.Shared;
+@using TicketHive.Shared.Api;
 @attribute [Authorize]
 @inject IEventsService eventsService 
 @inject AuthenticationStateProvider provider
 @inject NavigationManager navigationManager
 @inject ILocalStorageService localStorage
 @inject ICartService cartService
+@inject ApiHelper apiHelper
 
 <h1 id="title">Search for your next event</h1>
 <div class="search">

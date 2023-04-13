@@ -8,47 +8,33 @@ using System.Threading.Tasks;
 namespace TicketHive.Shared.Api
 {
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
-    public class Info
+    public class Rates
     {
-        [JsonProperty("rate")]
-        public double? Rate { get; set; }
+        [JsonProperty("EUR")]
+        public double? EUR { get; set; }
+
+        [JsonProperty("GBP")]
+        public double? GBP { get; set; }
+    }
+
+    public class Root
+    {
+        [JsonProperty("base")]
+        public string Base { get; set; }
+
+        [JsonProperty("date")]
+        public string Date { get; set; }
+
+        [JsonProperty("rates")]
+        public Rates Rates { get; set; }
+
+        [JsonProperty("success")]
+        public bool? Success { get; set; }
 
         [JsonProperty("timestamp")]
         public int? Timestamp { get; set; }
     }
 
-    public class Query
-    {
-        [JsonProperty("amount")]
-        public int? Amount { get; set; }
-
-        [JsonProperty("from")]
-        public string From { get; set; }
-
-        [JsonProperty("to")]
-        public string To { get; set; }
-    }
-
-    public class Root
-    {
-        [JsonProperty("date")]
-        public string Date { get; set; }
-
-        [JsonProperty("historical")]
-        public string Historical { get; set; }
-
-        [JsonProperty("info")]
-        public Info Info { get; set; }
-
-        [JsonProperty("query")]
-        public Query Query { get; set; }
-
-        [JsonProperty("result")]
-        public double? Result { get; set; }
-
-        [JsonProperty("success")]
-        public bool? Success { get; set; }
-    }
 
 
 }
