@@ -57,6 +57,7 @@ using (var serviceProvider = builder.Services.BuildServiceProvider())
         adminUser = new()
         {
             UserName = "admin",
+            Country = "Sweden",
         };
 
         //skapa en anv�ndare 
@@ -72,6 +73,7 @@ using (var serviceProvider = builder.Services.BuildServiceProvider())
         user = new()
         {
             UserName = "user",
+            Country = "Sweden",
         };
 
         //skapa en anv�ndare 
