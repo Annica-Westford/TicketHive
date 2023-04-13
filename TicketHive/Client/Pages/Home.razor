@@ -1,5 +1,6 @@
 ﻿@page "/home"
 @using Microsoft.AspNetCore.Authorization;
+@using TicketHive.Client.Api;
 @using TicketHive.Shared;
 @attribute [Authorize]
 @inject IEventsService eventsService 
@@ -7,6 +8,7 @@
 @inject NavigationManager navigationManager
 @inject ILocalStorageService localStorage
 @inject ICartService cartService
+@inject ApiHelper apiHelper
 
 <h1 id="title">Search for your next event</h1>
 <div class="search">
@@ -60,6 +62,10 @@
 
     protected override async Task OnInitializedAsync()
     {
+        //EUR, SEK, GBP
+        decimal? convertedAmount = await apiHelper.ConvertCurrencyAsync("SEK", "GBP", "100");
+
+
         // Hämtar alla populära events, sorterar dom och visar top 3 baserat på sålda biljetter
         List<EventModel> allEvents = await eventsService.GetAllEventsAsync();
         List<EventModel> sortedPopularEvents = allEvents.OrderByDescending(s => s.SoldTickets).ToList();
