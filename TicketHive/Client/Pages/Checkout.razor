@@ -11,8 +11,6 @@
 
 <AlertMessage IsVisible="@showAlert" Message="@alertMessage" Type="@alertType" />
 
-<button class="btn btn-primary" @onclick="(() => GoBack())">BACK</button>
-
 @if (shoppingCart != null)
 {
     if (shoppingCart.Count > 0)
@@ -38,9 +36,11 @@
                         </td>
                         <td>@item.Event.TicketPrice</td>
                         <td>
-                            <button class="btn btn-primary" @onclick="(() => cartService.DecreaseQuantity(item))">-</button>
-                        @item.Quantity
-                            <button class="btn btn-primary" @onclick="(() => cartService.IncreaseQuantity(item))">+</button>
+                            <div class="quantity-container">
+                                <button class="btn-quantity btn-quantity-hover-minus" @onclick="(() => cartService.DecreaseQuantity(item))">-</button>
+                                @item.Quantity
+                                <button class="btn-quantity btn-quantity-hover-plus" @onclick="(() => cartService.IncreaseQuantity(item))">+</button>
+                            </div>
                         </td>
                     <td>@(item.Event.TicketPrice * item.Quantity)</td>
                     </tr>
@@ -51,7 +51,10 @@
                     <td colspan="3" style="text-align: right"><strong>Order Total:</strong></td>
                         <td>@shoppingCart.Sum(item => item.Event.TicketPrice * item.Quantity)</td>
                 </tr>
-                <button class="btn btn-primary" @onclick="(() => ValidatePurchase(shoppingCart))">Purchase</button>
+                <tr class="btn-bottom">
+                    <button class="btn-primary" @onclick="(() => GoBack())">Back</button>
+                    <button class="btn-primary" @onclick="(() => ValidatePurchase(shoppingCart))">Complete</button>
+                </tr>
             </tfoot>
         </table>
 
@@ -69,8 +72,8 @@ else
 @code {
     private List<CartItemModel>? shoppingCart;
     private bool showAlert = false;
-    private string alertMessage;
-    private string alertType;
+    private string alertMessage = "";
+    private string alertType = "";
 
     // Behöver ha inloggarens identity för att lägga till i databasen?
     private string loggedInUserUsername;
