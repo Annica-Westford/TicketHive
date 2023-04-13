@@ -4,8 +4,10 @@
 @using TicketHive.Shared;
 @attribute [Authorize]
 @inject IEventsService eventsService
+@inject ICurrencyService currencyService
 @inject AuthenticationStateProvider provider
 @inject NavigationManager navigationManager
+
 
 @if (searchWord != null)
 {
@@ -49,7 +51,7 @@
             <div class="image-container">
                 <img src="@eventImage" />
                 <h2>@eventToDisplay.Name</h2>
-                <h3>Date: @eventToDisplay.DateTime</h3>
+                <h3>Date: @eventToDisplay.DateTime.ToString("dddd, dd MMMM yyyy")</h3>
                 <h3>Price: @eventToDisplay.TicketPrice</h3>
                 <p>Tickets left: @ticketsText</p>
                 <button class="btn btn-primary" @onclick="(() => ShowEvent(eventToDisplay.Id))">Read more</button>
@@ -65,6 +67,7 @@
     public string? fillButton;
     public int? ticketsLeft;
     public string? ticketsText;
+    private string currencyTitle;
 
     private List<EventModel>? allEvents;
     private List<EventModel>? filteredEvents;
@@ -72,7 +75,17 @@
 
     protected override async Task OnInitializedAsync()
     {
+        //Hämta user country
+        //Hämta currency title från currencyService
+
         allEvents = await eventsService.GetAllEventsAsync();
+
+        foreach (var e in allEvents)
+        {
+            //kalla på metoden ConvertAmount i currencyService och skicka med landet samt ticketprice
+            //sätt ticketprice till det som metoden returnerar
+        }
+
         filteredEvents = allEvents;
 
     }
