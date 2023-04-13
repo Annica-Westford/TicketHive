@@ -1,2 +1,57 @@
 ﻿body {
+    background-color: #f2f2f2; /* set a light, muted background color */
+}
+
+.container {
+    padding: 20px;
+}
+
+.event-image {
+    width: 100%;
+    border-radius: 50px;
+}
+
+.event-name {
+    color: #305076;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.event-type {
+    color: #305076;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.event-location,
+.event-date,
+.event-tickets-available {
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+.event-description {
+    margin-top: 20px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.btn-thirdary {
+    background-color: darkred;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: darkgreen;
+    color: white;
+}
+
+.btn-primary {
+    background-color: #305076;
+    color: #fbe89c;
 }

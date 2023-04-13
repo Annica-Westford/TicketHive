@@ -9,52 +9,47 @@
 @inject ILocalStorageService localStorage
 @inject ICartService cartService
 
-<button class="btn btn-primary" @onclick="(() => GoBack())">BACK</button>
+@if (selectedEvent != null)
+{
+    string eventImage = $"/Images/{selectedEvent.Image}.png";
 
-<div class="container">
-    <div class="row">
-        <div class="col">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <img class="event-image" src="@eventImage" alt="@selectedEvent.Name">
+            </div>
+        <div class="col-md-6">
+            <h2 class="event-name">@selectedEvent.Name</h2>
+            <p class="event-type">Event type: @selectedEvent.EventType</p>
+            <p class="event-location">Location: @selectedEvent.Location</p>
+            <p class="event-date">Date: @selectedEvent.DateTime.ToShortDateString() (@selectedEvent.DateTime.DayOfWeek)</p>
+            <p class="event-date">Time: @selectedEvent.DateTime.ToShortTimeString()</p>
+            <p class="event-description">@selectedEvent.Description</p>
+            <p class="event-tickets-available">@(@selectedEvent.MaxCapacity - @selectedEvent.SoldTickets) / @selectedEvent.MaxCapacity tickets available</p>
+            <div class="button-group">
+                <button class="btn btn-primary" @onclick="GoBack">Back</button>
 
-            @if (selectedEvent != null)
-            {
-                string eventImage = $"/Images/{selectedEvent.Image}.png";
+                    @if (IsEventInCart()) // Om eventet redan ligger i varukorgen
+                    {
+                    <button disabled class="btn btn-secondary">Event already in cart!</button>
+                    }
 
-                <h1>@selectedEvent.Name</h1>
-                <h2>@selectedEvent.EventType</h2>
-                <img src="@eventImage" />
-                <h3>Location: @selectedEvent.Location</h3>
-                <h4>Date: @selectedEvent.DateTime</h4>
-                <h4>Tickets available: @(@selectedEvent.MaxCapacity - @selectedEvent.SoldTickets) / @selectedEvent.MaxCapacity</h4>
+                    // Om eventet är fullbokat
+                    else if (selectedEvent.IsFullyBooked)
+                    {
+                    <button disabled class="btn btn-thirdary">SOLD OUT</button>
+                    }
 
-                // Om eventet redan ligger i varukorgen
-                // Här ska även läggas till att kolla om usern redan köpt biljett, då ska man inte heller kunna lägga till i varukorg
-                if (IsEventInCart())
-                {
-                    <button disabled class="btn btn-primary">Event added in cart!</button>
-                }
-
-                // Om eventet är fullbokat
-                else if (selectedEvent.IsFullyBooked)
-                {
-                    <button disabled class="btn btn-primary">SOLD OUT</button>
-                }
-
-                // Annars kan man klicka på lägg till i varukorgen
-                else
-                {
+                    // Annars kan man klicka på lägg till i varukorgen
+                    else
+                    {
                     <button class="btn btn-primary" @onclick="(() => AddToCart(selectedEvent))">Add event</button>
-                }
-
-            }
-
-        </div>
-        <div class="col">
-            <p>
-                @selectedEvent?.Description
-            </p>
+                    }
+            </div>
         </div>
     </div>
-</div>
+    </div>
+}
 
 @code {
     [Parameter]
