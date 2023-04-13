@@ -3,14 +3,14 @@ using TicketHive.Shared.Api;
 
 namespace TicketHive.Client.Services
 {
-    public class CurrencyService
+    public class CurrencyService : ICurrencyService
     {
         public async Task<decimal?> ConvertAmount(string country, decimal price)
         {
             //Get exchange rates from ApiHelper
-            Root? root = await new ApiHelper().GetExchangeRates();
+            Root? exchangeRates = await ApiHelper.GetExchangeRates();
 
-            if (root != null)
+            if (exchangeRates != null)
             {
                 if (country == "Sweden" || string.IsNullOrEmpty(country))
                 {
@@ -18,15 +18,31 @@ namespace TicketHive.Client.Services
                 }
                 else if (country == "Great_Britain")
                 {
-                    return price * Convert.ToDecimal(root.Rates.GBP);
+                    return price * Convert.ToDecimal(exchangeRates.Rates.GBP);
                 }
                 else
                 {
-                    return price * Convert.ToDecimal(root.Rates.EUR);
+                    return price * Convert.ToDecimal(exchangeRates.Rates.EUR);
                 }
             }
 
             return null;
+        }
+
+        public string GetCurrencyTitle(string country)
+        {
+            if (country == "Sweden" || string.IsNullOrEmpty(country))
+            {
+                return "kronor";
+            }
+            else if (country == "Great_Britain")
+            {
+                return "GBP";
+            }
+            else
+            {
+                return "€";
+            }
         }
     }
 }
