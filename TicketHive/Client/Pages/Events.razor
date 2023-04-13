@@ -49,7 +49,7 @@
             <div class="image-container">
                 <img src="@eventImage" />
                 <h2>@eventToDisplay.Name</h2>
-                <h3>Date: @eventToDisplay.DateTime</h3>
+                <h3>Date: @eventToDisplay.DateTime.ToString("dddd, dd MMMM yyyy")</h3>
                 <h3>Price: @eventToDisplay.TicketPrice</h3>
                 <p>Tickets left: @ticketsText</p>
                 <button class="btn btn-primary" @onclick="(() => ShowEvent(eventToDisplay.Id))">Read more</button>
