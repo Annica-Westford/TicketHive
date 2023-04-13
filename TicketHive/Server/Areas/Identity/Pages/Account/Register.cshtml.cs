@@ -35,7 +35,6 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
 
         [BindProperty]
         [Required]
-        //[FromForm(Name = "Country")]
         public string SelectedCountry { get; set; }
 
         public string Message { get; set; } = string.Empty;
