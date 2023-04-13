@@ -26,19 +26,19 @@ namespace TicketHive.Client.Api
             HttpClient.BaseAddress = new Uri("https://api.apilayer.com/exchangerates_data/");
         }
 
-        public async Task<decimal?> ConvertCurrencyAsync(string fromCurrency, string toCurrency, string amount)
+        public async Task<Root?> GetExchangeRates()
         {
             //string requestUrl = $"convert?from={fromCurrency}&to={toCurrency}&amount={amount}";
-            string requestUrl = $"convert?to={toCurrency}&from={fromCurrency}&amount={amount}";
+            string requestUrl = "latest?symbols=EUR,GBP&base=SEK";
 
             //create a HttpRequestMessage object specifying the HTTP method and URL
-            var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
 
             //request.Headers.Add("apikey", apiKey);
             request.Headers.Add("apikey", "Y7SC7DxWRf8EmOddLBwWb1fY67bHWFhy");
 
             //send the http request and get the response as an HttpResponseMessage
-            var response = await HttpClient.SendAsync(request);
+            HttpResponseMessage response = await HttpClient.SendAsync(request);
 
             if (response.IsSuccessStatusCode)
             {
@@ -48,12 +48,7 @@ namespace TicketHive.Client.Api
                 //deserialize the responseString info a C# object
                 Root? data = JsonConvert.DeserializeObject<Root>(responseString);
 
-                if (data != null)
-                {
-                    return Convert.ToDecimal(data.Result);
-                }
-
-                return null;
+                return data;
             }
 
             return null;
