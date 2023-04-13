@@ -8,10 +8,10 @@ using TicketHive.Server.Data;
 
 #nullable disable
 
-namespace TicketHive.Server.Data.Migrations
+namespace TicketHive.Server.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    partial class AuthDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -310,6 +310,9 @@ namespace TicketHive.Server.Data.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")

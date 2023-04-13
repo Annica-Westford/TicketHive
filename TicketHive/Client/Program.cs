@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using TicketHive.Client;
+using TicketHive.Client.Api;
 using TicketHive.Client.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -18,6 +19,8 @@ builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().Cre
 builder.Services.AddScoped<IEventsService, EventsService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<ICartService, CartService>();
+
+ApiCaller.InitializeClient();
 
 builder.Services.AddApiAuthorization();
 

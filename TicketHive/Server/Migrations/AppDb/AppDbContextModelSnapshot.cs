@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TicketHive.Server.Data;
 
 #nullable disable
 
-namespace TicketHive.Server.Migrations
+namespace TicketHive.Server.Migrations.AppDb
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230406010959_AdditionalSeededData")]
-    partial class AdditionalSeededData
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,7 +118,7 @@ namespace TicketHive.Server.Migrations
                             Description = "Meet up with the local talent Albin for adventures and fun! In a world with dungeons and dragons explore new territory, clash with dark monsters, spin lore and commit heroic feats while playing the greatest RPG of all time!\n\nIn Dungeons and Dragons your group works together on adventures. A group will have a mixture of different types of characters with different strengths and weaknesses. As a team, you decide how you’re going to approach an encounter to make the most of each character’s skills and abilities and support each other.",
                             EventType = "Games",
                             Image = "dndalbin",
-                            IsFullyBooked = false,
+                            IsFullyBooked = true,
                             Location = "Sweden",
                             MaxCapacity = 5,
                             Name = "D&D with Albin",

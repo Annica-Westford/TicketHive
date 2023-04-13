@@ -94,7 +94,7 @@ namespace TicketHive.Server.Controllers
         /// </summary>
         /// <param name="username">Username of the user to add the event to</param>
         /// <param name="eventId">Id of the event to add</param>
-        /// <returns>ActionResult</returns>
+        /// <returns>IActionResult representing the result of the update</returns>
         [HttpPut("{username}/{eventId}")]
         public async Task<IActionResult> AddEventToUserAsync(string username, int eventId)
         {
@@ -112,6 +112,7 @@ namespace TicketHive.Server.Controllers
         /// Adds the given EventModel instance to the repository
         /// </summary>
         /// <param name="eventToAdd">EventModel instance to add</param>
+        /// <returns>IActionResult representing the result of the add method</returns>
         [HttpPost]
         public async Task<IActionResult> AddEventAsync([FromBody] EventModel eventToAdd)
         {
@@ -123,6 +124,7 @@ namespace TicketHive.Server.Controllers
         /// Deletes the event with the given id from the repository
         /// </summary>
         /// <param name="id">Id of the event to delete</param>
+        /// <returns>IActionResult representing the result of the delete method</returns
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEventAsync(int id)
         {

@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TicketHive.Server.Data;
 
 #nullable disable
 
-namespace TicketHive.Server.Migrations
+namespace TicketHive.Server.Migrations.AppDb
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230412092745_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace TicketHive.Server.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("EventModelUserModel", (string)null);
+                    b.ToTable("EventModelUserModel");
                 });
 
             modelBuilder.Entity("TicketHive.Shared.EventModel", b =>
@@ -80,7 +83,7 @@ namespace TicketHive.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Events", (string)null);
+                    b.ToTable("Events");
 
                     b.HasData(
                         new
@@ -118,7 +121,7 @@ namespace TicketHive.Server.Migrations
                             Description = "Meet up with the local talent Albin for adventures and fun! In a world with dungeons and dragons explore new territory, clash with dark monsters, spin lore and commit heroic feats while playing the greatest RPG of all time!\n\nIn Dungeons and Dragons your group works together on adventures. A group will have a mixture of different types of characters with different strengths and weaknesses. As a team, you decide how you’re going to approach an encounter to make the most of each character’s skills and abilities and support each other.",
                             EventType = "Games",
                             Image = "dndalbin",
-                            IsFullyBooked = false,
+                            IsFullyBooked = true,
                             Location = "Sweden",
                             MaxCapacity = 5,
                             Name = "D&D with Albin",
@@ -267,7 +270,7 @@ namespace TicketHive.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
