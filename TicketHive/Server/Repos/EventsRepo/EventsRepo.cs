@@ -47,7 +47,13 @@ namespace TicketHive.Server.Repos.EventsRepo
             if (dbEvent != null && dbUser != null)
             {
                 dbUser.Events.Add(dbEvent);
-                await context.SaveChangesAsync();
+                try
+                {
+                    await context.SaveChangesAsync();
+                } catch (Exception ex) {
+                    Console.WriteLine(ex);
+                }
+                
                 return true;
             }
 

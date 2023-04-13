@@ -9,6 +9,41 @@ body {
     max-width: 1000px;
     margin: 0 auto;
     border-collapse: collapse;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+}
+
+h1 {
+    text-align: center;
+    color: #fbe89c;
+}
+
+.buttonwrapper {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.fullscreen img {
+    object-fit: cover;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: -1;
+}
+
+.fullscreen .background {
+    background-color: #fbe89c;
+    object-fit: cover;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: -1;
 }
 
     /* Style the table headings */

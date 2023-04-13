@@ -6,11 +6,16 @@
 
 <AlertMessage IsVisible="@showAlert" Message="@alertMessage" Type="@alertType" />
 
+<div class="fullscreen">
+    <div class="background"></div>
+    <img src="/Events.jpg" />
+</div>
+
 <h3>Admin</h3>
 
-<EditForm Model="newEvent" OnValidSubmit="AddEvent">
+<EditForm Model="newEvent" OnValidSubmit="AddEvent" id="form">
     <DataAnnotationsValidator></DataAnnotationsValidator>
-
+    <div id="">
     <div class="form-group">
         <label for="name">Name:</label>
         <InputText id="name" @bind-Value="newEvent.Name" class="form-control"></InputText>
@@ -52,9 +57,14 @@
         <InputNumber id="maxAttendees" @bind-Value="newEvent.MaxCapacity" class="form-control"></InputNumber>
         <ValidationMessage For="() => newEvent.MaxCapacity" />
     </div>
-
+        <div id="center">
     <button type="submit" class="btn btn-primary">Add Event</button>
+    </div>
+    </div>
 </EditForm>
+
+<div id="center">
+
 
 
 <select @bind="selectedItemId">
@@ -69,6 +79,49 @@
 </select>
 
 <button @onclick="() => DeleteEvent(selectedItemId)">Delete Event</button>
+</div>
+
+<style>
+    #form {
+        padding: 30px;
+        background-color: rgba(48, 80, 118, 0.8);
+        color: white;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .fullscreen img {
+        object-fit: cover;
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: -1;
+    }
+
+    .fullscreen .background {
+        background-color: #fbe89c;
+        object-fit: cover;
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: -1;
+    }
+
+    h3 {
+        text-align: center;  
+        color: white;
+    }
+
+    #center {
+        display: flex;
+        margin-top: 10px;
+        justify-content: center;
+    }
+</style>
 
 @code {
     private List<EventModel> allEvents;

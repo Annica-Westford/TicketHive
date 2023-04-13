@@ -1,8 +1,7 @@
 ﻿body {
 }
 
-form {
-    margin: 0 auto;
+#formable {
     padding: 20px;
     border-radius: 5px;
 }
@@ -50,22 +49,37 @@ input {
     border-radius: 3px;
 }
 
-input[type="submit"] {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    background-color: #305076;
-    color: #fbe89c;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-    input[type="submit"]:hover {
-        background-color: black;
+    input[type="text"],
+    input[type="password"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: none;
+        border-radius: 3px;
     }
+
+    input[type="submit"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        background-color: #305076;
+        color: #fbe89c;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        input[type="submit"]:hover {
+            background-color: black;
+        }
+
+.text-danger {
+    color: red;
+    font-size: 12px;
+}
 
 .text-danger {
     color: red;
@@ -80,6 +94,7 @@ input[type="submit"] {
     bottom: 0;
     left: 0;
     height: 100vh;
+    z-index: -1;
 }
 
 .div-center {
