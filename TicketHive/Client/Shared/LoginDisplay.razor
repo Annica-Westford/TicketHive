@@ -1,25 +1,30 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @inject NavigationManager navigationManager
-
+<ul>
 <AuthorizeView Roles="Admin">
-        <NavLink href="/admin" Match="NavLinkMatch.All">
+        <li><NavLink href="/admin" Match="NavLinkMatch.All">
             <span class="oi oi-shield"></span> Admin panel
-        </NavLink>
+        </NavLink></li>
 </AuthorizeView>
 <AuthorizeView>
     <Authorized>
-        <a href="/checkout"><span class="oi oi-cart"></span></a>
-        <a href="/home">Home</a>
-        <a href="/events">Events</a>
-        <a href="/account">Logged in as: @context.User.Identity?.Name</a>
-        <button class="nav-link btn btn-link" @onclick="BeginLogOut">Logout</button>
+            <li><a href="/checkout"><span class="oi oi-cart"></span></a></li>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/events">Events</a></li>
+            <li><a href="/account">Logged in as: @context.User.Identity?.Name</a></li>
+            <li><button class="nav-link btn btn-link" @onclick="BeginLogOut">Logout</button></li>
     </Authorized>
     <NotAuthorized>
-        <a href="authentication/register">Register</a>
-        <a href="authentication/login">Login</a>
+            <li><a href="authentication/register">Register</a></li>
+            <li><a href="authentication/login">Login</a></li>
     </NotAuthorized>
 </AuthorizeView>
+</ul>
+
+<style>
+
+</style>
 
 @code{
     private void BeginLogOut()

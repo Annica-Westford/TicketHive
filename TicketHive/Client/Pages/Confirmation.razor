@@ -8,6 +8,11 @@
 
 <h1 class="title">Thank you for your purchase!</h1>
 
+<div class="fullscreen">
+    <div class="background"></div>
+    <img src="/Events.jpg" />
+</div>
+
 <p class="message">Your order has been successfully processed.</p>
 
 <table class="table">
@@ -34,24 +39,40 @@
 
 <h3 class="total">Total: @boughtEvents.Sum(item => item.Event.TicketPrice * item.Quantity)</h3>
 
-<button class="btn btn-primary" @onclick="(() => GoToHome())">Continue</button>
+<div id="button-container">
+	<button class="btn btn-primary" @onclick="(() => GoToHome())">Continue</button>
+</div>
+
 
 <style>
+    #button-container {
+        display: flex;
+        justify-content: center;
+    }
+
     .title {
         font-size: 36px;
         font-weight: bold;
         margin-bottom: 20px;
+        color: #fbe89c;
+        text-align: center;
     }
 
     .message {
         font-size: 24px;
         margin-bottom: 30px;
+        color: #fbe89c;
+        text-align: center;
     }
 
     .table {
         width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
         border-collapse: collapse;
-        margin-bottom: 30px;
+        padding: 20px;
+        background-color: rgba(0, 0, 0, 0.4);
+        color: white;
     }
 
         .table th {
@@ -68,6 +89,29 @@
     .total {
         font-size: 24px;
         font-weight: bold;
+        text-align: center;
+        color: #fbe89c;
+    }
+
+    .fullscreen img {
+        object-fit: cover;
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: -1;
+    }
+
+    .fullscreen .background {
+        background-color: #fbe89c;
+        object-fit: cover;
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: -1;
     }
 </style>
 

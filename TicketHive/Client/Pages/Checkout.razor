@@ -11,6 +11,11 @@
 
 <AlertMessage IsVisible="@showAlert" Message="@alertMessage" Type="@alertType" />
 
+<div class="fullscreen">
+    <div class="background"></div>
+    <img src="/Events.jpg" />
+</div>
+
 @if (shoppingCart != null)
 {
     if (shoppingCart.Count > 0)
@@ -51,17 +56,18 @@
                     <td colspan="3" style="text-align: right"><strong>Order Total:</strong></td>
                         <td>@shoppingCart.Sum(item => item.Event.TicketPrice * item.Quantity)</td>
                 </tr>
-                <tr class="btn-bottom">
-                    <button class="btn-primary" @onclick="(() => GoBack())">Back</button>
-                    <button class="btn-primary" @onclick="(() => ValidatePurchase(shoppingCart))">Complete</button>
-                </tr>
             </tfoot>
         </table>
+        <div class="buttonwrapper">
+			<button class="btn-primary" @onclick="(() => GoBack())">Back</button>
+			<button class="btn-primary" @onclick="(() => ValidatePurchase(shoppingCart))">Complete</button>
+        </div>
+        
 
     }
     else
     {
-        <p>You have emptied your cart dawg.</p>
+        <p>You have emptied your cart!</p>
     }
 }
 else

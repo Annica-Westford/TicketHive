@@ -13,12 +13,17 @@
 {
     string eventImage = $"/Images/{selectedEvent.Image}.png";
 
+    <div class="fullscreen">
+        <div class="background"></div>
+        <img src="/Events.jpg" />
+    </div>
+
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col">
                 <img class="event-image" src="@eventImage" alt="@selectedEvent.Name">
             </div>
-        <div class="col-md-6">
+        <div class="col" id="card">
             <h2 class="event-name">@selectedEvent.Name</h2>
             <p class="event-type">Event type: @selectedEvent.EventType</p>
             <p class="event-location">Location: @selectedEvent.Location</p>
@@ -31,7 +36,7 @@
 
                     @if (IsEventInCart()) // Om eventet redan ligger i varukorgen
                     {
-                    <button disabled class="btn btn-secondary">Event already in cart!</button>
+                    <button id="btn-back" disabled class="btn btn-secondary">Event already in cart!</button>
                     }
 
                     // Om eventet är fullbokat
