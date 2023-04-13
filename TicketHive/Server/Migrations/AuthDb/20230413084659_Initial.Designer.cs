@@ -12,8 +12,8 @@ using TicketHive.Server.Data;
 namespace TicketHive.Server.Migrations.AuthDb
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20230413082806_IdentityDb")]
-    partial class IdentityDb
+    [Migration("20230413084659_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
