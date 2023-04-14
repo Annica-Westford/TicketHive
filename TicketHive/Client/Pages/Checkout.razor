@@ -8,6 +8,8 @@
 @inject IEventsService eventsService
 @inject ILocalStorageService localStorage
 @inject ICartService cartService
+@inject IIdentityService identityService
+@inject ICurrencyService currencyService
 
 <AlertMessage IsVisible="@showAlert" Message="@alertMessage" Type="@alertType" />
 
@@ -39,7 +41,7 @@
                             <h4>@item.Event.Name</h4>
                             <br><p>Tickets remaining: @(@item.Event.MaxCapacity - @item.Event.SoldTickets)</p>
                         </td>
-                        <td>@item.Event.TicketPrice</td>
+                        <td>@decimal.Round(item.Event.TicketPrice, 2) @currencyTitle</td>
                         <td>
                             <div class="quantity-container">
                                 <button class="btn-quantity btn-quantity-hover-minus" @onclick="(() => cartService.DecreaseQuantity(item))">-</button>
@@ -47,14 +49,16 @@
                                 <button class="btn-quantity btn-quantity-hover-plus" @onclick="(() => cartService.IncreaseQuantity(item))">+</button>
                             </div>
                         </td>
-                    <td>@(item.Event.TicketPrice * item.Quantity)</td>
+                        @*<td>@(item.Event.TicketPrice * item.Quantity) @currencyTitle</td>*@
+                        <td>@(decimal.Round((item.Event.TicketPrice * item.Quantity), 2)) @currencyTitle</td>
                     </tr>
                 }
             </tbody>
             <tfoot>
                 <tr>
                     <td colspan="3" style="text-align: right"><strong>Order Total:</strong></td>
-                        <td>@shoppingCart.Sum(item => item.Event.TicketPrice * item.Quantity)</td>
+                        @*<td>@shoppingCart.Sum(item => item.Event.TicketPrice * item.Quantity)</td>*@
+                    <td>@shoppingCart.Sum(item => decimal.Round((item.Event.TicketPrice * item.Quantity), 2))</td>
                 </tr>
             </tfoot>
         </table>
@@ -81,6 +85,9 @@ else
     private string alertMessage = "";
     private string alertType = "";
 
+    private string currencyTitle;
+    private decimal exchangeRate;
+
     // Behöver ha inloggarens identity för att lägga till i databasen?
     private string loggedInUserUsername;
 
@@ -92,6 +99,22 @@ else
 
         // Hämtar alla items i shoppingcart
         shoppingCart = cartService.GetShoppingCartItems();
+
+        string selectedCountry = await identityService.GetUserCountryAsync(loggedInUserUsername);
+
+        if (selectedCountry != null)
+        {
+            //Hämta currency title från currencyService
+            currencyTitle = currencyService.GetCurrencyTitle(selectedCountry);
+
+            //if the method returns null exchangeRate defaults to 1
+            exchangeRate = (await currencyService.GetExchangeRate(selectedCountry)) ?? 1;
+
+            foreach (CartItemModel cartItem in shoppingCart)
+            {
+                cartItem.Event.TicketPrice *= exchangeRate;
+            }
+        }
     }
 
     private void GoBack()

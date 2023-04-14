@@ -38,7 +38,6 @@
         {
             if (eventToDisplay.IsFullyBooked)
             {
-                // Här ska någon text eller färg indikera att eventet är slutsålt
                 ticketsText = "SOLD OUT";
             }
             else
@@ -53,7 +52,7 @@
                 <img src="@eventImage" />
                 <h2>@eventToDisplay.Name</h2>
                 <h3>Date: @eventToDisplay.DateTime.ToString("dddd, dd MMMM yyyy")</h3>
-                <h3>Price: @(decimal.Round(eventToDisplay.TicketPrice * exchangeRate, 2)) @currencyTitle</h3>
+                <h3>Price: @(decimal.Round(eventToDisplay.TicketPrice, 2)) @currencyTitle</h3>
                 <p>Tickets left: @ticketsText</p>
                 <button class="btn btn-primary" @onclick="(() => ShowEvent(eventToDisplay.Id))">Read more</button>
             </div>
@@ -91,6 +90,11 @@
 
             //if the method returns null exchangeRate defaults to 1
             exchangeRate = (await currencyService.GetExchangeRate(selectedCountry)) ?? 1;
+
+            foreach (EventModel e in allEvents)
+            {
+                e.TicketPrice *= exchangeRate;
+            }
         }
 
         filteredEvents = allEvents;
