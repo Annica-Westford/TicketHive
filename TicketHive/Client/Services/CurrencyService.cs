@@ -5,6 +5,30 @@ namespace TicketHive.Client.Services
 {
     public class CurrencyService : ICurrencyService
     {
+        public async Task<decimal?> GetExchangeRate(string country)
+        {
+            //Get exchange rates from ApiHelper
+            Root? exchangeRates = await ApiHelper.GetExchangeRates();
+
+            if (exchangeRates != null)
+            {
+                if (country == "Sweden" || string.IsNullOrEmpty(country))
+                {
+                    return 1;
+                }
+                if (country == "Great_Britain")
+                {
+                    return Convert.ToDecimal(exchangeRates.Rates.GBP);
+                }
+                else
+                {
+                    return Convert.ToDecimal(exchangeRates.Rates.EUR);
+                }
+            }
+
+            return null;
+        }
+
         public async Task<decimal?> ConvertAmount(string country, decimal price)
         {
             //Get exchange rates from ApiHelper
