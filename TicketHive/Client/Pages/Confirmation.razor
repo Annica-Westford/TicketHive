@@ -2,9 +2,12 @@
 @using Microsoft.AspNetCore.Authorization;
 @attribute [Authorize]
 @inject NavigationManager navigationManager
+@inject AuthenticationStateProvider provider
 @inject IEventsService eventsService
 @inject ILocalStorageService localStorage
 @inject ICartService cartService
+@inject IIdentityService identityService
+@inject ICurrencyService currencyService
 
 <h1 class="title">Thank you for your purchase!</h1>
 
@@ -31,13 +34,13 @@
                 <td>@item.Event.Name</td>
                 <td>@item.Event.TicketPrice</td>
                 <td>@item.Quantity</td>
-                <td>@(item.Event.TicketPrice * item.Quantity)</td>
+                <td>@(decimal.Round((item.Event.TicketPrice * exchangeRate * item.Quantity), 2)) @currencyTitle</td>
             </tr>
         }
     </tbody>
 </table>
 
-<h3 class="total">Total: @boughtEvents.Sum(item => item.Event.TicketPrice * item.Quantity)</h3>
+<h3 class="total">Total: @boughtEvents.Sum(item => decimal.Round((item.Event.TicketPrice * exchangeRate * item.Quantity), 2)) @currencyTitle</h3>
 
 <div id="button-container">
 	<button class="btn btn-primary" @onclick="(() => GoToHome())">Continue</button>
@@ -118,11 +121,26 @@
 @code {
     private List<CartItemModel>? boughtEvents;
 
+    private string currencyTitle;
+    private decimal exchangeRate;
+
     protected override async Task OnInitializedAsync()
     {
         // Hämtar alla items i shoppingcart
         boughtEvents = cartService.GetShoppingCartItems();
 
+        var authState = await provider.GetAuthenticationStateAsync();
+        string loggedInUserUsername = authState.User.Identity.Name;
+        string selectedCountry = await identityService.GetUserCountryAsync(loggedInUserUsername);
+
+        if (selectedCountry != null)
+        {
+            //Hämta currency title från currencyService
+            currencyTitle = currencyService.GetCurrencyTitle(selectedCountry);
+
+            //if the method returns null exchangeRate defaults to 1
+            exchangeRate = (await currencyService.GetExchangeRate(selectedCountry)) ?? 1;
+        }
 
         // Clearar cookies
         await ClearCookies();
