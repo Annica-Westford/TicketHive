@@ -5,7 +5,8 @@
 @attribute [Authorize]
 @inject IEventsService eventsService
 @inject ICurrencyService currencyService
-@inject AuthenticationStateProvider provider
+@inject IIdentityService identityService
+@inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager navigationManager
 
 
@@ -52,7 +53,7 @@
                 <img src="@eventImage" />
                 <h2>@eventToDisplay.Name</h2>
                 <h3>Date: @eventToDisplay.DateTime.ToString("dddd, dd MMMM yyyy")</h3>
-                <h3>Price: @eventToDisplay.TicketPrice</h3>
+                <h3>Price: @(decimal.Round(eventToDisplay.TicketPrice * exchangeRate, 2)) @currencyTitle</h3>
                 <p>Tickets left: @ticketsText</p>
                 <button class="btn btn-primary" @onclick="(() => ShowEvent(eventToDisplay.Id))">Read more</button>
             </div>
@@ -68,6 +69,7 @@
     public int? ticketsLeft;
     public string? ticketsText;
     private string currencyTitle;
+    private decimal exchangeRate;
 
     private List<EventModel>? allEvents;
     private List<EventModel>? filteredEvents;
@@ -75,19 +77,23 @@
 
     protected override async Task OnInitializedAsync()
     {
-        //Hämta user country
-        //Hämta currency title från currencyService
-
         allEvents = await eventsService.GetAllEventsAsync();
 
-        foreach (var e in allEvents)
+        //Hämta user country
+        var authState = await authStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        string selectedCountry = await identityService.GetUserCountryAsync(user.Identity!.Name);
+
+        if (selectedCountry != null)
         {
-            //kalla på metoden ConvertAmount i currencyService och skicka med landet samt ticketprice
-            //sätt ticketprice till det som metoden returnerar
+            //Hämta currency title från currencyService
+            currencyTitle = currencyService.GetCurrencyTitle(selectedCountry);
+
+            //if the method returns null exchangeRate defaults to 1
+            exchangeRate = (await currencyService.GetExchangeRate(selectedCountry)) ?? 1;
         }
 
         filteredEvents = allEvents;
-
     }
 
     protected override void OnParametersSet()
