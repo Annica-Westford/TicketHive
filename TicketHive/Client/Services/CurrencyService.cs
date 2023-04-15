@@ -61,7 +61,7 @@ namespace TicketHive.Client.Services
             }
             else if (country == "Great_Britain")
             {
-                return "GBP";
+                return "£";
             }
             else
             {
