@@ -32,15 +32,15 @@
         {
             <tr>
                 <td>@item.Event.Name</td>
-                <td>@(decimal.Round((item.Event.TicketPrice * exchangeRate), 2)) @currencyTitle</td>
+                <td>@(decimal.Round((item.Event.TicketPrice * exchangeRate), 2)) @currencyName</td>
                 <td>@item.Quantity</td>
-                <td>@(decimal.Round((item.Event.TicketPrice * exchangeRate * item.Quantity), 2)) @currencyTitle</td>
+                <td>@(decimal.Round((item.Event.TicketPrice * exchangeRate * item.Quantity), 2)) @currencyName</td>
             </tr>
         }
     </tbody>
 </table>
 
-<h3 class="total">Total: @boughtEvents.Sum(item => decimal.Round((item.Event.TicketPrice * exchangeRate * item.Quantity), 2)) @currencyTitle</h3>
+<h3 class="total">Total: @boughtEvents.Sum(item => decimal.Round((item.Event.TicketPrice * exchangeRate * item.Quantity), 2)) @currencyName</h3>
 
 <div id="button-container">
 	<button class="btn btn-primary" @onclick="(() => GoToHome())">Continue</button>
@@ -121,7 +121,7 @@
 @code {
     private List<CartItemModel>? boughtEvents;
 
-    private string currencyTitle;
+    private string currencyName;
     private decimal exchangeRate;
 
     protected override async Task OnInitializedAsync()
@@ -136,7 +136,7 @@
         if (selectedCountry != null)
         {
             //Hämta currency title från currencyService
-            currencyTitle = currencyService.GetCurrencyName(selectedCountry);
+            currencyName = currencyService.GetCurrencyName(selectedCountry);
 
             //if the method returns null exchangeRate defaults to 1
             exchangeRate = (currencyService.GetExchangeRate(selectedCountry)) ?? 1;

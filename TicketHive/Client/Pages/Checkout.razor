@@ -41,7 +41,7 @@
                             <h4>@item.Event.Name</h4>
                             <br><p>Tickets remaining: @(@item.Event.MaxCapacity - @item.Event.SoldTickets)</p>
                         </td>
-                        <td>@decimal.Round(item.Event.TicketPrice * exchangeRate, 2) @currencyTitle</td>
+                        <td>@decimal.Round(item.Event.TicketPrice * exchangeRate, 2) @currencyName</td>
                         <td>
                             <div class="quantity-container">
                                 <button class="btn-quantity btn-quantity-hover-minus" @onclick="(() => cartService.DecreaseQuantity(item))">-</button>
@@ -50,7 +50,7 @@
                             </div>
                         </td>
                         @*<td>@(item.Event.TicketPrice * item.Quantity) @currencyTitle</td>*@
-                        <td>@(decimal.Round((item.Event.TicketPrice * exchangeRate * item.Quantity), 2)) @currencyTitle</td>
+                        <td>@(decimal.Round((item.Event.TicketPrice * exchangeRate * item.Quantity), 2)) @currencyName</td>
                     </tr>
                 }
             </tbody>
@@ -58,7 +58,7 @@
                 <tr>
                     <td colspan="3" style="text-align: right"><strong>Order Total:</strong></td>
                         @*<td>@shoppingCart.Sum(item => item.Event.TicketPrice * item.Quantity)</td>*@
-                    <td>@shoppingCart.Sum(item => decimal.Round((item.Event.TicketPrice * exchangeRate * item.Quantity), 2)) @currencyTitle</td>
+                    <td>@shoppingCart.Sum(item => decimal.Round((item.Event.TicketPrice * exchangeRate * item.Quantity), 2)) @currencyName</td>
                 </tr>
             </tfoot>
         </table>
@@ -85,7 +85,7 @@ else
     private string alertMessage = "";
     private string alertType = "";
 
-    private string currencyTitle;
+    private string currencyName;
     private decimal exchangeRate;
 
     // Behöver ha inloggarens identity för att lägga till i databasen?
@@ -105,7 +105,7 @@ else
         if (selectedCountry != null)
         {
             //Hämta currency title från currencyService
-            currencyTitle = currencyService.GetCurrencyName(selectedCountry);
+            currencyName = currencyService.GetCurrencyName(selectedCountry);
 
             //if the method returns null exchangeRate defaults to 1
             exchangeRate = (currencyService.GetExchangeRate(selectedCountry)) ?? 1;

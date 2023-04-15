@@ -34,7 +34,7 @@
             <p class="event-date">Time: @selectedEvent.DateTime.ToShortTimeString()</p>
             <p class="event-description">@selectedEvent.Description</p>
             <p class="event-tickets-available">@(@selectedEvent.MaxCapacity - @selectedEvent.SoldTickets) / @selectedEvent.MaxCapacity tickets available</p>
-            <p class="event-ticketprice">Price: @(decimal.Round(selectedEvent.TicketPrice * exchangeRate, 2)) @currencyTitle</p>
+            <p class="event-ticketprice">Price: @(decimal.Round(selectedEvent.TicketPrice * exchangeRate, 2)) @currencyName</p>
             <div class="button-group">
                 <button class="btn btn-primary" @onclick="GoBack">Back</button>
 
@@ -64,7 +64,7 @@
     [Parameter]
     public int Id { get; set; }
     private EventModel? selectedEvent;
-    private string currencyTitle;
+    private string currencyName;
     private decimal exchangeRate;
 
     protected override async Task OnInitializedAsync()
@@ -83,7 +83,7 @@
         if (selectedCountry != null)
         {
             //Hämta currency title från currencyService
-            currencyTitle = currencyService.GetCurrencyName(selectedCountry);
+            currencyName = currencyService.GetCurrencyName(selectedCountry);
 
             //if the method returns null exchangeRate defaults to 1
             exchangeRate = (currencyService.GetExchangeRate(selectedCountry)) ?? 1;

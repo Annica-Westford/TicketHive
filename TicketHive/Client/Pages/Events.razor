@@ -51,7 +51,7 @@
                 <img src="@eventImage" />
                 <h2>@eventToDisplay.Name</h2>
                 <h3>Date: @eventToDisplay.DateTime.ToString("dddd, dd MMMM yyyy")</h3>
-                <h3>Price: @(decimal.Round(eventToDisplay.TicketPrice * exchangeRate, 2)) @currencyTitle</h3>
+                <h3>Price: @(decimal.Round(eventToDisplay.TicketPrice * exchangeRate, 2)) @currencyName</h3>
                 <p>Tickets left: @ticketsText</p>
                 <button class="btn btn-primary" @onclick="(() => ShowEvent(eventToDisplay.Id))">Read more</button>
             </div>
@@ -65,7 +65,7 @@
     public string? fillButton;
     public int? ticketsLeft;
     public string? ticketsText;
-    private string currencyTitle;
+    private string currencyName;
     private decimal exchangeRate;
 
     private List<EventModel>? allEvents;
@@ -84,7 +84,7 @@
         if (selectedCountry != null)
         {
             //Hämta currency title från currencyService
-            currencyTitle = currencyService.GetCurrencyName(selectedCountry);
+            currencyName = currencyService.GetCurrencyName(selectedCountry);
 
             //if the method returns null exchangeRate defaults to 1
             exchangeRate = (currencyService.GetExchangeRate(selectedCountry)) ?? 1;
