@@ -8,6 +8,8 @@
 @inject IEventsService eventsService
 @inject ILocalStorageService localStorage
 @inject ICartService cartService
+@inject ICurrencyService currencyService
+@inject IIdentityService identityService
 
 @if (selectedEvent != null)
 {
@@ -28,9 +30,11 @@
             <p class="event-type">Event type: @selectedEvent.EventType</p>
             <p class="event-location">Location: @selectedEvent.Location</p>
             <p class="event-date">Date: @selectedEvent.DateTime.ToString("dddd, dd MMMM yyyy")</p>
+            <p class="event-date">Date: @selectedEvent.DateTime.ToShortDateString()</p>
             <p class="event-date">Time: @selectedEvent.DateTime.ToShortTimeString()</p>
             <p class="event-description">@selectedEvent.Description</p>
             <p class="event-tickets-available">@(@selectedEvent.MaxCapacity - @selectedEvent.SoldTickets) / @selectedEvent.MaxCapacity tickets available</p>
+            <p class="event-ticketprice">Price: @(decimal.Round(selectedEvent.TicketPrice * exchangeRate, 2)) @currencyTitle</p>
             <div class="button-group">
                 <button class="btn btn-primary" @onclick="GoBack">Back</button>
 
@@ -60,6 +64,8 @@
     [Parameter]
     public int Id { get; set; }
     private EventModel? selectedEvent;
+    private string currencyTitle;
+    private decimal exchangeRate;
 
     protected override async Task OnInitializedAsync()
     {
@@ -68,6 +74,20 @@
 
         // Laddar rätt event man klickat in på
         selectedEvent = await eventsService.GetEventByIdAsync(Id);
+
+        //Hämta user country
+        var authState = await provider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        string selectedCountry = await identityService.GetUserCountryAsync(user.Identity!.Name);
+
+        if (selectedCountry != null)
+        {
+            //Hämta currency title från currencyService
+            currencyTitle = currencyService.GetCurrencyTitle(selectedCountry);
+
+            //if the method returns null exchangeRate defaults to 1
+            exchangeRate = (await currencyService.GetExchangeRate(selectedCountry)) ?? 1;
+        }
     }
 
     private void GoBack()

@@ -6,7 +6,7 @@
 @inject IEventsService eventsService
 @inject ICurrencyService currencyService
 @inject IIdentityService identityService
-@inject AuthenticationStateProvider authStateProvider
+@inject AuthenticationStateProvider provider
 @inject NavigationManager navigationManager
 
 
@@ -79,7 +79,7 @@
         allEvents = await eventsService.GetAllEventsAsync();
 
         //Hämta user country
-        var authState = await authStateProvider.GetAuthenticationStateAsync();
+        var authState = await provider.GetAuthenticationStateAsync();
         var user = authState.User;
         string selectedCountry = await identityService.GetUserCountryAsync(user.Identity!.Name);
 
