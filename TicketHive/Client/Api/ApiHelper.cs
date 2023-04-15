@@ -14,6 +14,12 @@ namespace TicketHive.Client.Api
             HttpClient.BaseAddress = new Uri("https://api.apilayer.com/exchangerates_data/");
         }
 
+        /// <summary>
+        /// Retrieves exchange rates using an HTTP GET request to an external API and returns them as a Root object.
+        /// </summary>
+        /// <returns>
+        /// A Task object that represents the asynchronous operation. The task result contains a Root object that represents the exchange rates, or null if the HTTP request fails.
+        /// </returns>
         public static async Task<Root?> GetExchangeRates()
         {
             if (exchangeRates == null)
