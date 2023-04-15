@@ -30,14 +30,11 @@
         {
             string eventName = eventsBought[i].Name;
             string eventHref = $"/eventdetails/{eventsBought[i].Id}";
-            if (i == 0)
+            if (i > 0)
             {
-                <span><a href="@eventHref">@eventName</a></span>
+                <span>, </span>
             }
-            else
-            {
-                <span>, <a href="@eventHref">@eventName</a></span>
-            }
+            <span><a href="@eventHref">@eventName</a></span>
         }
     </p>
 }

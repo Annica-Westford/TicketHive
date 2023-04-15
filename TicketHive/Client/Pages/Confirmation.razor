@@ -32,7 +32,7 @@
         {
             <tr>
                 <td>@item.Event.Name</td>
-                <td>@item.Event.TicketPrice</td>
+                <td>@(decimal.Round((item.Event.TicketPrice * exchangeRate), 2)) @currencyTitle</td>
                 <td>@item.Quantity</td>
                 <td>@(decimal.Round((item.Event.TicketPrice * exchangeRate * item.Quantity), 2)) @currencyTitle</td>
             </tr>
