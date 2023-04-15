@@ -16,50 +16,50 @@
 <EditForm Model="newEvent" OnValidSubmit="AddEvent" id="form">
     <DataAnnotationsValidator></DataAnnotationsValidator>
     <div id="">
-    <div class="form-group">
-        <label for="name">Name:</label>
-        <InputText id="name" @bind-Value="newEvent.Name" class="form-control"></InputText>
-        <ValidationMessage For="() => newEvent.Name" />
-    </div>
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <InputText id="name" @bind-Value="newEvent.Name" class="form-control"></InputText>
+            <ValidationMessage For="() => newEvent.Name" />
+        </div>
 
-    <div class="form-group">
-        <label for="description">Description:</label>
-        <InputTextArea id="description" @bind-Value="newEvent.Description" class="form-control"></InputTextArea>
-        <ValidationMessage For="() => newEvent.Description" />
-    </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <InputTextArea id="description" @bind-Value="newEvent.Description" class="form-control"></InputTextArea>
+            <ValidationMessage For="() => newEvent.Description" />
+        </div>
 
-    <div class="form-group">
-        <label for="eventType">Event Type:</label>
-        <InputText id="eventType" @bind-Value="newEvent.EventType" class="form-control"></InputText>
-        <ValidationMessage For="() => newEvent.EventType" />
-    </div>
+        <div class="form-group">
+            <label for="eventType">Event Type:</label>
+            <InputText id="eventType" @bind-Value="newEvent.EventType" class="form-control"></InputText>
+            <ValidationMessage For="() => newEvent.EventType" />
+        </div>
 
-    <div class="form-group">
-        <label for="location">Location:</label>
-        <InputText id="location" @bind-Value="newEvent.Location" class="form-control"></InputText>
-        <ValidationMessage For="() => newEvent.Location" />
-    </div>
+        <div class="form-group">
+            <label for="location">Location:</label>
+            <InputText id="location" @bind-Value="newEvent.Location" class="form-control"></InputText>
+            <ValidationMessage For="() => newEvent.Location" />
+        </div>
 
-    <div class="form-group">
-        <label for="dateTime">Date and Time:</label>
-        <input type="datetime-local" id="dateTime" @bind-value="@newEvent.DateTime" class="form-control"
-               min="@DateTime.Today.ToString("yyyy-MM-ddTHH:mm")"></input>
-    </div>    
+        <div class="form-group">
+            <label for="dateTime">Date and Time:</label>
+            <input type="datetime-local" id="dateTime" @bind-value="@newEvent.DateTime" class="form-control"
+                   min="@DateTime.Today.ToString("yyyy-MM-ddTHH:mm")"></input>
+        </div>
 
-    <div class="form-group">
-        <label for="ticketPrice">Ticket Price:</label>
-        <InputNumber id="ticketPrice" @bind-Value="newEvent.TicketPrice" class="form-control"></InputNumber>
-        <ValidationMessage For="() => newEvent.TicketPrice" />
-    </div>
+        <div class="form-group">
+            <label for="ticketPrice">Ticket Price:</label>
+            <InputNumber id="ticketPrice" @bind-Value="newEvent.TicketPrice" class="form-control"></InputNumber>
+            <ValidationMessage For="() => newEvent.TicketPrice" />
+        </div>
 
-    <div class="form-group">
-        <label for="maxAttendees">Max attendees:</label>
-        <InputNumber id="maxAttendees" @bind-Value="newEvent.MaxCapacity" class="form-control"></InputNumber>
-        <ValidationMessage For="() => newEvent.MaxCapacity" />
-    </div>
+        <div class="form-group">
+            <label for="maxAttendees">Max attendees:</label>
+            <InputNumber id="maxAttendees" @bind-Value="newEvent.MaxCapacity" class="form-control"></InputNumber>
+            <ValidationMessage For="() => newEvent.MaxCapacity" />
+        </div>
         <div id="center">
-    <button type="submit" class="btn btn-primary">Add Event</button>
-    </div>
+            <button type="submit" class="btn btn-primary">Add Event</button>
+        </div>
     </div>
 </EditForm>
 
@@ -67,18 +67,18 @@
 
 
 
-<select @bind="selectedItemId">
-    <option value=""></option>
-    @if (allEvents != null)
-    {
-        foreach (var item in allEvents)
+    <select @bind="selectedItemId">
+        <option value=""></option>
+        @if (allEvents != null)
         {
-            <option value="@item.Id">@item.Name</option>
+            foreach (var item in allEvents)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
         }
-    }
-</select>
+    </select>
 
-<button @onclick="() => DeleteEvent(selectedItemId)">Delete Event</button>
+    <button @onclick="() => DeleteEvent(selectedItemId)">Delete Event</button>
 </div>
 
 <style>
@@ -112,7 +112,7 @@
     }
 
     h3 {
-        text-align: center;  
+        text-align: center;
         color: white;
     }
 
@@ -125,7 +125,7 @@
 
 @code {
     private List<EventModel>? allEvents;
-    private int selectedItemId;
+    private int selectedItemId = 0;
     private EventModel newEvent = new() { DateTime = DateTime.Now };
     private bool showAlert = false;
     private string alertMessage;
@@ -182,23 +182,24 @@
     private async Task DeleteEvent(int id)
     {
         //if the user hasn't selected anything from the dropdown menu
-        //if (id == null || id == 0)
-        //{
-        //    showAlert = true;
-        //    alertMessage = "Please select an event to delete!";
-        //    alertType = "danger";
-        //    return;
-        //}
-
-        if (allEvents != null && await jsRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this event?"))
+        if (selectedItemId != 0)
+        {
+            if (allEvents != null && await jsRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this event?"))
+            {
+                showAlert = true;
+                alertMessage = "Event has been removed from the database!";
+                alertType = "danger";
+                await eventsService.DeleteEventAsync(id);
+                allEvents.RemoveAll(item => item.Id == id);
+                selectedItemId = 0;
+            }
+        }
+        else
         {
             showAlert = true;
-            alertMessage =  "Event has been removed from the database!";
+            alertMessage = "Select an event before pressing that button you peasant!";
             alertType = "danger";
-            await eventsService.DeleteEventAsync(id);
-            allEvents.RemoveAll(item => item.Id == id);
+            return;
         }
-
-        
     }
 }
