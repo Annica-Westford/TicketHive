@@ -124,7 +124,7 @@
 </style>
 
 @code {
-    private List<EventModel> allEvents;
+    private List<EventModel>? allEvents;
     private int selectedItemId;
     private EventModel newEvent = new() { DateTime = DateTime.Now };
     private bool showAlert = false;
@@ -134,25 +134,10 @@
     protected override async Task OnInitializedAsync()
     {
         allEvents = await eventsService.GetAllEventsAsync();
-
-        //EventModel testEvent = new()
-        //{
-        //    Name = "Blih",
-        //    EventType = "Cinema",
-        //    Location = "Malmö",
-        //    DateTime = DateTime.Now,
-        //    TicketPrice = 200m,
-        //    MaxCapacity = 300
-        //};
-
-        //await eventsService.AddEventAsync(testEvent);
-
     }
 
     private async Task AddEvent()
     {
-        showAlert = true;
-
         //Add random image to event
         newEvent.Image = $"image-{new Random().Next(1, 27)}";
 
@@ -160,23 +145,51 @@
 
         if (isAddedSuccessfullyEvent)
         {
-            alertMessage = newEvent.Name + " has been successfully added to the events!";
-            alertType = "success";
+            ShowSuccessMessage();
 
-            allEvents.Add(newEvent);
+            if (allEvents != null)
+            {
+                allEvents.Add(newEvent);
+            }
+            else
+            {
+                ShowErrorMessage();
+            }
 
             //clear input fields
             newEvent = new() { DateTime = DateTime.Now };
         }
         else
         {
-            alertMessage = "Something went wrong...";
-            alertType = "danger";
+            ShowErrorMessage();
         }
+    }
+
+    private void ShowSuccessMessage()
+    {
+        showAlert = true;
+        alertMessage = newEvent.Name + " has been successfully added to the events!";
+        alertType = "success";
+    }
+
+    private void ShowErrorMessage()
+    {
+        showAlert = true;
+        alertMessage = "Something went wrong...";
+        alertType = "danger";
     }
 
     private async Task DeleteEvent(int id)
     {
+        //if the user hasn't selected anything from the dropdown menu
+        //if (id == null || id == 0)
+        //{
+        //    showAlert = true;
+        //    alertMessage = "Please select an event to delete!";
+        //    alertType = "danger";
+        //    return;
+        //}
+
         if (allEvents != null && await jsRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this event?"))
         {
             showAlert = true;

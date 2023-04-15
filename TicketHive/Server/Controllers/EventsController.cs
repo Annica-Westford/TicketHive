@@ -6,7 +6,6 @@ using TicketHive.Shared;
 
 namespace TicketHive.Server.Controllers
 {
-    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EventsController : ControllerBase
@@ -76,7 +75,6 @@ namespace TicketHive.Server.Controllers
         /// <param name="eventToUpdate">EventModel instance with updated data</param>
         /// <param name="id">Id of the event to update</param>
         /// <returns>Updated EventModel instance</returns>
-        //[Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<ActionResult<EventModel?>> UpdateEventAsync([FromBody] EventModel eventToUpdate, int id)
         {

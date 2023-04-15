@@ -31,11 +31,11 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
         [BindProperty]
         [Required]
         [Compare(nameof(Password), ErrorMessage = "Passwords don't match!")]
-        public string VerifiedPassword { get; set; }
+        public string? VerifiedPassword { get; set; }
 
         [BindProperty]
         [Required]
-        public string SelectedCountry { get; set; }
+        public string? SelectedCountry { get; set; }
 
         public string Message { get; set; } = string.Empty;
 
@@ -49,9 +49,9 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
         }
 
         /// <summary>
-        /// Handles the HTTP POST request for registering a new user
+        /// Handles request to register a new user
         /// </summary>
-        /// <returns>A Task of IActionResult that represents the result of the action. If the
+        /// <returns>An IActionResult that represents the result of the action. If the
         /// user registation is successful the action redirects the user to the login page. If it
         /// fails or the model state is invalid, the action returns the current page and displays 
         /// the validation errors
@@ -61,7 +61,6 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
             //Om alla properties är bindade som de ska
             if (ModelState.IsValid)
             {
-                //Skapa en ny ApplicationUser med användarnamnet som är inskrivet
                 ApplicationUser newUser = new()
                 {
                     UserName = Username,
