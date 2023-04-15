@@ -9,6 +9,7 @@
 @inject NavigationManager navigationManager
 @inject ILocalStorageService localStorage
 @inject ICartService cartService
+@inject ICurrencyService currencyService
 
 <h1 id="title">Search for your next event</h1>
 <div class="search">
@@ -85,6 +86,10 @@
         var authState = await provider.GetAuthenticationStateAsync();
         var name = authState.User.Identity.Name;
         eventsBought = await eventsService.GetAllEventsFromUserAsync(name);
+
+        //Sätt exchangeRates direkt när användaren loggat in
+        await currencyService.SetExchangeRates();
+
     }
 
     void ShowEvent(int id)
