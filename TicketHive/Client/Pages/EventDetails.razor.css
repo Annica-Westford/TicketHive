@@ -51,6 +51,7 @@
 
 .event-location,
 .event-date,
+.event-ticketprice,
 .event-tickets-available {
     font-size: 1.2rem;
     margin-top: 10px;
