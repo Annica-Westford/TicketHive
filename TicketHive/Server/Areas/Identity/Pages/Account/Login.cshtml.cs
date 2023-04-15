@@ -31,10 +31,10 @@ namespace TicketHive.Server.Areas.Identity.Pages.Account
         }
 
         /// <summary>
-        /// Handles the HTTP POST request for logging in a user with a username and password.
+        /// Handles the request for logging in a user with a username and password.
         /// </summary>
         /// <returns>
-        /// A task of IAcionResult that represents the result of the action. If the user login
+        /// An IAcionResult that represents the result of the action. If the user login
         /// is successful, the action redirects the user to the home page. If the login fails or the
         /// model state is invalid, the action returns the current page with any validation errors displayed.
         /// </returns>

@@ -144,18 +144,5 @@ namespace TicketHive.Server.Repos.EventsRepo
             return null;
         }
 
-        //public async Task UpdateSoldTickets(EventModel eventToUpdate, int id, int ticketUpdate)
-        //{
-        //    var dbEvent = await context.Events.FirstOrDefaultAsync(e => e.Id == id);
-
-        //    if (dbEvent != null)
-        //    {
-        //        dbEvent.SoldTickets += ticketUpdate;
-        //        await context.SaveChangesAsync();
-
-        //    }
-        //}
-
-
     }
 }
