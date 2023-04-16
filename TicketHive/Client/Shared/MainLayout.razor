@@ -27,10 +27,10 @@
                         <AuthorizeView>
                             <Authorized>
                                 <li><a href="/checkout"><span class="oi oi-cart"></span></a></li>
-                                <li><a href="/home">Home</a></li>
-                                <li><a href="/events">Events</a></li>
-                                <li><a href="/account">Logged in as: @context.User.Identity?.Name</a></li>
-                                <li><a class="nav-link btn btn-link" @onclick="BeginLogOut">Logout</a></li>
+                                <li><a href="/home"><span class="oi oi-home"></span> Home</a></li>
+                                <li><a href="/events"><span class="oi oi-grid-three-up"></span> Events</a></li>
+                                <li><a href="/account"><span class="oi oi-person"></span> Logged in as: @context.User.Identity?.Name</a></li>
+                                <li><a class="nav-link btn btn-link" @onclick="BeginLogOut"><span class="oi oi-power-standby"></span> Logout</a></li>
                             </Authorized>
                             <NotAuthorized>
                                 <li><a href="authentication/register">Register</a></li>

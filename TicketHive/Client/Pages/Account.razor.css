@@ -1,6 +1,11 @@
 ﻿body {
 }
 
+h3 {
+    display: flex;
+    justify-content: center;
+}
+
 #formable {
     padding: 20px;
     border-radius: 5px;

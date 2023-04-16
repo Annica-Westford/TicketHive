@@ -27,7 +27,7 @@
         <table class="table">
             <thead>
                 <tr>
-                <th>Event</th>
+                    <th>Event</th>
                     <th>Ticket Price</th>
                     <th>Quantity</th>
                     <th>Event Total</th>
@@ -49,7 +49,6 @@
                                 <button class="btn-quantity btn-quantity-hover-plus" @onclick="(() => cartService.IncreaseQuantity(item))">+</button>
                             </div>
                         </td>
-                        @*<td>@(item.Event.TicketPrice * item.Quantity) @currencyTitle</td>*@
                         <td>@(decimal.Round((item.Event.TicketPrice * exchangeRate * item.Quantity), 2)) @currencyName</td>
                     </tr>
                 }
@@ -57,26 +56,31 @@
             <tfoot>
                 <tr>
                     <td colspan="3" style="text-align: right"><strong>Order Total:</strong></td>
-                        @*<td>@shoppingCart.Sum(item => item.Event.TicketPrice * item.Quantity)</td>*@
                     <td>@shoppingCart.Sum(item => decimal.Round((item.Event.TicketPrice * exchangeRate * item.Quantity), 2)) @currencyName</td>
                 </tr>
             </tfoot>
         </table>
         <div class="buttonwrapper">
 			<button class="btn-primary" @onclick="(() => GoBack())">Back</button>
-			<button class="btn-primary" @onclick="(() => ValidatePurchase(shoppingCart))">Complete</button>
+			<button class="btn-primary" @onclick="(() => ValidatePurchase(shoppingCart))">Complete purchase</button>
         </div>
-        
-
     }
     else
     {
-        <p>You have emptied your cart!</p>
+        // Om användarens varukorg är tom men cookie finns redan
+        <h1>Your cart is empty!</h1>
+        <div class="buttonwrapper">
+            <button class="btn-primary" @onclick="(() => GoBack())">Browse events</button>
+        </div>
     }
 }
 else
 {
-    <p>You seem new here... Go add some events!</p>
+    // Om användaren är helt ny till sidan och det inte finns någon cookie sedan tidigare, får man ett speciellt meddelande som uppmanar att kolla på events
+    <h1>You seem new here... Go add some events!</h1>
+    <div class="buttonwrapper">
+        <button class="btn-primary" @onclick="(() => GoBack())">Browse events</button>
+    </div>
 }
 
 @code {
@@ -88,7 +92,7 @@ else
     private string currencyName;
     private decimal exchangeRate;
 
-    // Behöver ha inloggarens identity för att lägga till i databasen?
+    // Behöver ha inloggarens identity för att lägga till i databasen
     private string loggedInUserUsername;
 
     protected override async Task OnInitializedAsync()
@@ -107,7 +111,7 @@ else
             //Hämta currency title från currencyService
             currencyName = currencyService.GetCurrencyName(selectedCountry);
 
-            //if the method returns null exchangeRate defaults to 1
+            // Om GetExchangeRate returnar null så sätts den till 1
             exchangeRate = (currencyService.GetExchangeRate(selectedCountry)) ?? 1;
         }
     }
@@ -153,6 +157,7 @@ else
                         navigationManager.NavigateTo($"/confirmation");
                     }
                 }
+                // Utifall något gick åt fanders
                 else
                 {
                     showAlert = true;

@@ -20,6 +20,7 @@
 <div class="back">
     <div class="div-center">
         <div class="content">
+            <h3>REGISTER NEW ACCOUNT</h3>
             <form method="post">
                 <label for="username-input">Username:</label>
                 <input id="username-input" type="text" asp-for="Username" placeholder="Username" />
@@ -50,7 +51,7 @@
                 </div>
                 <input type="submit" value="Register" />
                 <div id="center">
-                    <a href="/authentication/login">Log In</a>
+                    <a href="/authentication/login">Back to login</a>
                 </div>
             </form>
         </div>
@@ -62,6 +63,11 @@
         margin: 0 auto;
         padding: 20px;
         border-radius: 5px;
+    }
+
+    h3 {
+        display: flex;
+        justify-content: center;
     }
 
     #center {
