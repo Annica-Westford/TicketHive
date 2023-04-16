@@ -38,18 +38,18 @@
             <div class="button-group">
                 <button class="btn btn-primary" @onclick="GoBack">Back</button>
 
-                    @if (IsEventInCart()) // Om eventet redan ligger i varukorgen
+                    @if (IsEventInCart()) // Om eventet redan ligger i varukorgen är köpknappen disabled och grön
                     {
                     <button id="btn-back" disabled class="btn btn-secondary">Event already in cart!</button>
                     }
 
-                    // Om eventet är fullbokat
+                    // Om eventet är fullbokat är köpknappen disabled och står SOLD OUT i rött
                     else if (selectedEvent.IsFullyBooked)
                     {
                     <button disabled class="btn btn-thirdary">SOLD OUT</button>
                     }
 
-                    // Annars kan man klicka på lägg till i varukorgen
+                    // Om eventet har tillgängliga biljetter kan man lägga till det i varukorgen
                     else
                     {
                     <button class="btn btn-primary" @onclick="(() => AddToCart(selectedEvent))">Add event</button>
@@ -75,31 +75,34 @@
         // Laddar rätt event man klickat in på
         selectedEvent = await eventsService.GetEventByIdAsync(Id);
 
-        //Hämta user country
+        // Hämtar user country
         var authState = await provider.GetAuthenticationStateAsync();
         var user = authState.User;
         string selectedCountry = await identityService.GetUserCountryAsync(user.Identity!.Name);
 
         if (selectedCountry != null)
         {
-            //Hämta currency title från currencyService
+            // Hämtar currency title från currencyService
             currencyName = currencyService.GetCurrencyName(selectedCountry);
 
-            //if the method returns null exchangeRate defaults to 1
+            // Om GetExchangeRate returnar null så sätts den till 1
             exchangeRate = (currencyService.GetExchangeRate(selectedCountry)) ?? 1;
         }
     }
 
+    // Skickar tillbaka till alla events
     private void GoBack()
     {
         navigationManager.NavigateTo($"/events");
     }
 
+    // Lägger till eventet i carten
     private async Task AddToCart(EventModel selectedEvent)
     {
         await cartService.AddToCartAsync(selectedEvent);
     }
 
+    // Jämnför om eventets id är det samma som eventet man klickat in på
     private bool IsEventInCart()
     {
         foreach (var item in cartService.GetShoppingCartItems())

@@ -16,6 +16,14 @@ main {
     padding: 0 15px;
 }
 
+.oi.oi-cart {
+    font-size: 24px; /* Storlek på kundvagnen */
+    padding: 0;
+    margin: 0;
+    top: 0px;
+    display: flex;
+    align-items: start
+}
 
 .header-area {
     background-color: rgba(48, 80, 118, 0.8);

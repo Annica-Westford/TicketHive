@@ -17,18 +17,14 @@
     <button id="searchbtn" class="btn btn-primary" @onclick="@(() => SearchForEvent())">Search</button>
     <button id="eventbtn" class="btn btn-primary" @onclick="(() => ShowAllEvents())">Show all events</button>
 </div>
+
 @if (eventsBought != null && eventsBought.Count > 0)
 {
     <p class="attending">You are already attending: 
 
-@*    @foreach (var eventBought in eventsBought)
-    {
-            string eventHref = $"/eventdetails/{eventBought.Id}";
-            <span><a href="@eventHref">@eventBought.Name</a>, </span>
-    }*@
-
     @for (int i = 0; i < eventsBought.Count; i++)
         {
+            // För att få kommatecken efter varje event man ska gå på, men inte få kommatecken om det bara är 1 event
             string eventName = eventsBought[i].Name;
             string eventHref = $"/eventdetails/{eventsBought[i].Id}";
             if (i > 0)
@@ -46,12 +42,13 @@
     <div class="row movie-list">
         @foreach (var eventToDisplay in popularEvents)
     {
+        // Visar dom 3 mest populära events baserat på sålda biljetter
         string eventImage = $"/Images/{eventToDisplay.Image}.png";
         <div class="image-container">
         <h3>@popularityPosition) @eventToDisplay.Name</h3>
         <p>People attending: @eventToDisplay.SoldTickets</p>
         <img src="@eventImage"/>
-        <button class="btn btn-primary" @onclick="(() => ShowEvent(eventToDisplay.Id))">Read more</button>
+        <button class="btn btn-primary" @onclick="(() => ShowEvent(eventToDisplay.Id))">SHOW DETAILS</button>
         </div>
         popularityPosition++;
     }
@@ -66,7 +63,6 @@
 </div>
 
 @code {
-
     private List<EventModel>? popularEvents = null;
     private List<EventModel>? eventsBought;
     private string searchWord;
@@ -74,7 +70,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Hämtar alla populära events, sorterar dom och visar top 3 baserat på sålda biljetter
+        // Hämtar alla events, sorterar dom och lägger till top 3 i en ny lista baserat på sålda biljetter
         List<EventModel> allEvents = await eventsService.GetAllEventsAsync();
         List<EventModel> sortedPopularEvents = allEvents.OrderByDescending(s => s.SoldTickets).ToList();
         popularEvents = sortedPopularEvents.Take(3).ToList();
